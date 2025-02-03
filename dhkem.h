@@ -18,7 +18,7 @@
 
 void extract_and_expand(u8 *shared_secret, u8 *dh, u8 *kem_context);
 void encap(u8 *shared_secret, u8 *enc, u8 *pkR);
-void decap(uint8_t *shared_secret, uint8_t *enc, uint8_t *skR);
+void decap(u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR);
 void auth_encap(uint8_t *shared_secret, uint8_t *enc, uint8_t *pkR, uint8_t *pkS);
 void auth_decap(uint8_t *shared_secret, uint8_t *enc, uint8_t *skR, uint8_t *pkS);
 
