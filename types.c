@@ -36,3 +36,9 @@ u8 u8_string(char *s)
     };
     return out;
 }
+
+void u8_copy(u8 *dst, u8 *src)
+{
+    dst->len = src->len;
+    memcpy(dst->data, src->data, src->len);
+}

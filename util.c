@@ -11,7 +11,6 @@
  *
  * SPDX-License-Identifier: MPL-2.0
  */
-#include <openssl/err.h>
 #include <openssl/rand.h>
 #include "util.h"
 
@@ -23,14 +22,6 @@ void print_hex(const unsigned char *data, size_t len)
         printf("%02x", data[i]);
     }
     printf("\n");
-}
-
-// Utility to handle errors
-void handle_errors(char *msg)
-{
-    ERR_print_errors_fp(stderr);
-    fprintf(stderr, "app: %s\n", msg);
-    exit(1);
 }
 
 // Generate a random byte array

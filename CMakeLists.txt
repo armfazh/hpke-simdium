@@ -19,7 +19,7 @@ set(CMAKE_C_STANDARD_REQUIRED True)
 
 find_package(OpenSSL REQUIRED)
 
-add_compile_options(-Wall -Wextra -Wpedantic)
+add_compile_options(-Wall -Wextra -Wpedantic -g)
 add_executable(hpke-simdium
     util.c
     types.c

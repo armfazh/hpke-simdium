@@ -10,9 +10,9 @@ int main()
   OpenSSL_add_all_algorithms();
   ERR_load_crypto_strings();
 
-  main_x25519();
+  // main_x25519();
   // main_kdf();
-  // main_dhkem();
+  main_dhkem();
 
   return 0;
 }

@@ -84,10 +84,10 @@ void labeled_extract(u8 *key, u8 *secret, u8 *salt, u8 *label)
 
 void labeled_expand(u8 *out, u8 *key, u8 *info, u8 *label)
 {
-    u8 labeled_info = u8_malloc(2 + sizeof(Version) + sizeof(Suite_ID) + label->len + info->len);
-    uint8_t *ptr = labeled_info.data;
-
     uint8_t length[2] = {(out->len >> 8) & 0xFF, out->len & 0xFF};
+    u8 labeled_info = u8_malloc(2 + sizeof(Version) + sizeof(Suite_ID) + label->len + info->len);
+
+    uint8_t *ptr = labeled_info.data;
     memcpy(ptr, length, 2);
     ptr += 2;
     memcpy(ptr, Version, sizeof(Version));
