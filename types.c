@@ -11,17 +11,20 @@
  *
  * SPDX-License-Identifier: MPL-2.0
  */
-#ifndef _DHKEM_H_
-#define _DHKEM_H_
-
 #include "types.h"
+#include "util.h"
+#include <string.h>
+#include <stdlib.h>
 
-void extract(u8 *key, u8 *secret, u8 *salt);
-void expand(u8 *out, u8 *key, u8 *info);
+u8 u8_malloc(size_t len)
+{
+    u8 out = {
+        .len = len,
+        .data = (uint8_t *)malloc(len),
+    };
+    memset(out.data, 0, out.len);
+    return out;
+}
 
-void labeled_extract(u8 *key, u8 *secret, u8 *salt, u8 *label);
-void labeled_expand(u8 *out, u8 *key, u8 *info, u8 *label);
-
-int main_kdf();
-
-#endif /* _DHKEM_H_ */
+void u8_free(u8 *x) { free(x->data); }
+void u8_print(u8 *x) { print_hex(x->data, x->len); }

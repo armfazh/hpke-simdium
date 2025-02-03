@@ -21,6 +21,7 @@ find_package(OpenSSL REQUIRED)
 
 add_executable(hpke-simdium
     util.c
+    types.c
     x25519.c
     kdf.c
     main.c
