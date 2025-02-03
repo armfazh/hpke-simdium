@@ -98,12 +98,8 @@ int shared(unsigned char *shared_secret, EVP_PKEY *key, EVP_PKEY *key2)
     return 0;
 }
 
-int main()
+int main_x25519()
 {
-    // Initialize OpenSSL
-    OpenSSL_add_all_algorithms();
-    ERR_load_crypto_strings();
-
     EVP_PKEY *aliceKey = NULL;
     keygen(&aliceKey);
     print_key(aliceKey);

@@ -22,5 +22,7 @@ find_package(OpenSSL REQUIRED)
 add_executable(hpke-simdium
     util.c
     x25519.c
+    kdf.c
+    main.c
 )
 target_link_libraries(hpke-simdium OpenSSL::Crypto)
