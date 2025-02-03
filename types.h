@@ -26,5 +26,6 @@ typedef struct u8_slice
 u8 u8_malloc(size_t len);
 void u8_free(u8 *x);
 void u8_print(u8 *x);
+u8 u8_string(char *s);
 
 #endif /* _TYPES_H_ */

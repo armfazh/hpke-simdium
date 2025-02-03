@@ -24,6 +24,7 @@ add_executable(hpke-simdium
     types.c
     x25519.c
     kdf.c
+    dhkem.c
     main.c
 )
 target_link_libraries(hpke-simdium OpenSSL::Crypto)

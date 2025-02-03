@@ -11,8 +11,8 @@
  *
  * SPDX-License-Identifier: MPL-2.0
  */
-#ifndef _DHKEM_H_
-#define _DHKEM_H_
+#ifndef _KDF_H_
+#define _KDF_H_
 
 #include "types.h"
 
@@ -24,4 +24,4 @@ void labeled_expand(u8 *out, u8 *key, u8 *info, u8 *label);
 
 int main_kdf();
 
-#endif /* _DHKEM_H_ */
+#endif /* _KDF_H_ */

@@ -28,3 +28,11 @@ u8 u8_malloc(size_t len)
 
 void u8_free(u8 *x) { free(x->data); }
 void u8_print(u8 *x) { print_hex(x->data, x->len); }
+u8 u8_string(char *s)
+{
+    u8 out = {
+        .len = strlen(s),
+        .data = (uint8_t *)s,
+    };
+    return out;
+}
