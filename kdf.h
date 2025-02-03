@@ -19,6 +19,18 @@
 
 void extract(uint8_t *key, size_t key_len, uint8_t *secret, size_t secret_len, uint8_t *salt, size_t salt_len);
 void expand(uint8_t *out, size_t out_len, uint8_t *key, size_t key_len, uint8_t *info, size_t info_len);
+
+void labeled_extract(
+    uint8_t *key, size_t key_len,
+    uint8_t *secret, size_t secret_len,
+    uint8_t *salt, size_t salt_len,
+    uint8_t *label, size_t label_len);
+void labeled_expand(
+    uint8_t *out, size_t out_len,
+    uint8_t *key, size_t key_len,
+    uint8_t *info, size_t info_len,
+    uint8_t *label, size_t label_len);
+
 int main_kdf();
 
 #endif /* _DHKEM_H_ */
