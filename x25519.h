@@ -14,12 +14,10 @@
 #ifndef _X25519_H_
 #define _X25519_H_
 
-#include <stdint.h>
-#include <openssl/evp.h>
+#include "types.h"
 
-void print_key(EVP_PKEY *key);
-int keygen(EVP_PKEY **key);
-int shared(uint8_t *shared_secret, EVP_PKEY *key, EVP_PKEY *key2);
+void keygen(u8 *sk, u8 *pk);
+void shared(u8 *shared_secret, u8 *sk, u8 *pk);
 
 int main_x25519();
 

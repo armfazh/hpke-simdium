@@ -13,6 +13,7 @@
  */
 #include "dhkem.h"
 #include "kdf.h"
+#include "x25519.h"
 #include "types.h"
 
 #include <stdio.h>
@@ -29,8 +30,9 @@ void extract_and_expand(u8 *shared_secret, u8 *dh, u8 *kem_context)
     u8_free(&empty_salt);
 }
 
-void encap(uint8_t *shared_secret, uint8_t *enc, uint8_t *pkR)
+void encap(u8 *shared_secret, u8 *enc, u8 *pkR)
 {
+    // keygen();
 }
 
 void decap(uint8_t *shared_secret, uint8_t *enc, uint8_t *skR) {}
