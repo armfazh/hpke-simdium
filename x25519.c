@@ -113,24 +113,24 @@ void shared(u8 *shared_secret, u8 *sk, u8 *pk)
 
 int main_x25519()
 {
-    u8 aSk = u8_malloc(32);
-    u8 aPk = u8_malloc(32);
+    u8_static(aSk, 32);
+    u8_static(aPk, 32);
     keygen(&aSk, &aPk);
     printf("sk: ");
     u8_print(&aSk);
     printf("pk: ");
     u8_print(&aPk);
 
-    u8 bSk = u8_malloc(32);
-    u8 bPk = u8_malloc(32);
+    u8_static(bSk, 32);
+    u8_static(bPk, 32);
     keygen(&bSk, &bPk);
     printf("sk: ");
     u8_print(&bSk);
     printf("pk: ");
     u8_print(&bPk);
 
-    u8 aliceShared = u8_malloc(32);
-    u8 bobShared = u8_malloc(32);
+    u8_static(aliceShared, 32);
+    u8_static(bobShared, 32);
 
     shared(&aliceShared, &aSk, &bPk);
     printf("ss: ");
@@ -139,13 +139,6 @@ int main_x25519()
     shared(&bobShared, &bSk, &aPk);
     printf("ss: ");
     u8_print(&bobShared);
-
-    u8_free(&aSk);
-    u8_free(&aPk);
-    u8_free(&bSk);
-    u8_free(&bPk);
-    u8_free(&aliceShared);
-    u8_free(&bobShared);
 
     return 0;
 }

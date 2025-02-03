@@ -17,7 +17,7 @@
 
 void print_hex(const unsigned char *data, size_t len)
 {
-    int i = 0;
+    size_t i = 0;
     for (i = 0; i < len; i++)
     {
         printf("%02x", data[i]);

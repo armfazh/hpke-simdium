@@ -28,4 +28,11 @@ void u8_free(u8 *x);
 void u8_print(u8 *x);
 u8 u8_string(char *s);
 
+#define u8_static(name, length)  \
+    uint8_t name##_data[length]; \
+    u8 name = {                  \
+        .len = length,           \
+        .data = name##_data,     \
+    };
+
 #endif /* _TYPES_H_ */
