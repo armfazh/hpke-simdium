@@ -11,13 +11,14 @@
  *
  * SPDX-License-Identifier: MPL-2.0
  */
+
+#include "util.h"
+
 #include <openssl/err.h>
 #include <openssl/evp.h>
 #include <openssl/rand.h>
 #include <openssl/ssl.h>
 #include <stdio.h>
-
-#include "util.h"
 
 void print_key(EVP_PKEY *key)
 {
@@ -70,7 +71,7 @@ int keygen(EVP_PKEY **key)
     return 0;
 }
 
-int shared(unsigned char *shared_secret, EVP_PKEY *key, EVP_PKEY *key2)
+int shared(uint8_t *shared_secret, EVP_PKEY *key, EVP_PKEY *key2)
 {
     EVP_PKEY_CTX *ctx = EVP_PKEY_CTX_new(key, NULL);
     if (!ctx)
@@ -108,8 +109,8 @@ int main_x25519()
     keygen(&bobKey);
     print_key(bobKey);
 
-    unsigned char aliceShared[32];
-    unsigned char bobShared[32];
+    uint8_t aliceShared[32];
+    uint8_t bobShared[32];
 
     shared(aliceShared, aliceKey, bobKey);
     print_hex(aliceShared, 32);
