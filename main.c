@@ -12,7 +12,8 @@ int main()
 
   // main_x25519();
   // main_kdf();
-  main_dhkem();
+  // main_dhkem();
+  main_auth_dhkem();
 
   return 0;
 }
