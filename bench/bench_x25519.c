@@ -41,9 +41,3 @@ void bench_x25519(void)
   printf("======  X25519 OSSL ======\n");
   bench_ecdh_ossl();
 }
-
-int main()
-{
-  bench_x25519();
-  return 0;
-}
