@@ -1,6 +1,19 @@
+#include "x25519.h"
 #include "x25519_avx2.h"
 #include "x25519_ossl.h"
 #include <stdio.h>
+
+struct xdh XDH_OSSL = {
+    .name = "OSSL",
+    .keygen = keygen_ossl,
+    .shared = shared_ossl,
+};
+
+struct xdh XDH_AVX2 = {
+    .name = "AVX2",
+    .keygen = keygen_avx2,
+    .shared = shared_avx2,
+};
 
 void keygen(u8 *sk, u8 *pk)
 {

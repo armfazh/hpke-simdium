@@ -19,6 +19,16 @@
 void keygen(u8 *sk, u8 *pk);
 void shared(u8 *shared_secret, u8 *sk, u8 *pk);
 
+struct xdh
+{
+    char *name;
+    void (*keygen)(u8 *sk, u8 *pk);
+    void (*shared)(u8 *shared_secret, u8 *sk, u8 *pk);
+};
+
+extern struct xdh XDH_OSSL;
+extern struct xdh XDH_AVX2;
+
 int main_x25519();
 
 #endif /* _X25519_H_ */

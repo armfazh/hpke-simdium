@@ -29,14 +29,14 @@ void extract_and_expand(u8 *shared_secret, u8 *dh, u8 *kem_context)
     labeled_expand(shared_secret, &eae_prk, kem_context, &label_shared_secret);
 }
 
-void encap(u8 *shared_secret, u8 *enc, u8 *pkR)
+void encap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *pkR)
 {
     u8_static(skE, 32);
     u8_static(pkE, 32);
     u8_static(dh, 32);
 
-    keygen(&skE, &pkE);
-    shared(&dh, &skE, pkR);
+    x->keygen(&skE, &pkE);
+    x->shared(&dh, &skE, pkR);
     u8_copy(enc, &pkE);
 
     u8_static(kem_context, 2 * 32);
@@ -48,10 +48,10 @@ void encap(u8 *shared_secret, u8 *enc, u8 *pkR)
     extract_and_expand(shared_secret, &dh, &kem_context);
 }
 
-void decap(u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR)
+void decap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR)
 {
     u8_static(dh, 32);
-    shared(&dh, skR, enc);
+    x->shared(&dh, skR, enc);
 
     u8_static(kem_context, 2 * 32);
     uint8_t *ptr = kem_context.data;
@@ -62,16 +62,16 @@ void decap(u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR)
     extract_and_expand(shared_secret, &dh, &kem_context);
 }
 
-void auth_encap(u8 *shared_secret, u8 *enc, u8 *pkR, u8 *skS, u8 *pkS)
+void auth_encap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *pkR, u8 *skS, u8 *pkS)
 {
     u8_static(skE, 32);
     u8_static(pkE, 32);
     u8_static(dh1, 32);
     u8_static(dh2, 32);
 
-    keygen(&skE, &pkE);
-    shared(&dh1, &skE, pkR);
-    shared(&dh2, skS, pkR);
+    x->keygen(&skE, &pkE);
+    x->shared(&dh1, &skE, pkR);
+    x->shared(&dh2, skS, pkR);
 
     u8_static(dh, 2 * 32);
     uint8_t *ptr = dh.data;
@@ -92,12 +92,12 @@ void auth_encap(u8 *shared_secret, u8 *enc, u8 *pkR, u8 *skS, u8 *pkS)
     extract_and_expand(shared_secret, &dh, &kem_context);
 }
 
-void auth_decap(u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR, u8 *pkS)
+void auth_decap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR, u8 *pkS)
 {
     u8_static(dh1, 32);
     u8_static(dh2, 32);
-    shared(&dh1, skR, enc);
-    shared(&dh2, skR, pkS);
+    x->shared(&dh1, skR, enc);
+    x->shared(&dh2, skR, pkS);
 
     u8_static(dh, 2 * 32);
     uint8_t *ptr = dh.data;
@@ -128,14 +128,14 @@ int main_dhkem()
 
     u8 ss1 = u8_malloc(32);
     u8 enc = u8_malloc(32);
-    encap(&ss1, &enc, &pkR);
+    encap(&XDH_OSSL, &ss1, &enc, &pkR);
     printf("ss1: ");
     u8_print(&ss1);
     printf("enc: ");
     u8_print(&enc);
 
     u8 ss2 = u8_malloc(32);
-    decap(&ss2, &enc, &skR, &pkR);
+    decap(&XDH_OSSL, &ss2, &enc, &skR, &pkR);
     printf("ss2: ");
     u8_print(&ss2);
 
@@ -169,14 +169,14 @@ int main_auth_dhkem()
 
     u8 ss1 = u8_malloc(32);
     u8 enc = u8_malloc(32);
-    auth_encap(&ss1, &enc, &pkR, &skS, &pkS);
+    auth_encap(&XDH_AVX2, &ss1, &enc, &pkR, &skS, &pkS);
     printf("ss1: ");
     u8_print(&ss1);
     printf("enc: ");
     u8_print(&enc);
 
     u8 ss2 = u8_malloc(32);
-    auth_decap(&ss2, &enc, &skR, &pkR, &pkS);
+    auth_decap(&XDH_AVX2, &ss2, &enc, &skR, &pkR, &pkS);
     printf("ss2: ");
     u8_print(&ss2);
 

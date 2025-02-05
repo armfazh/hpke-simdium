@@ -13,7 +13,7 @@ int main()
 
   // main_kdf();
   main_dhkem();
-  // main_auth_dhkem();
+  main_auth_dhkem();
   // main_x25519_ossl();
   // main_x25519_avx2();
 
