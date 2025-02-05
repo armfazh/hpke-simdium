@@ -43,6 +43,7 @@ add_library(hpke-simdium
     x25519_avx2.c
     kdf.c
     dhkem.c
+    dhkem_ossl.c
 )
 
 add_executable(main main.c)

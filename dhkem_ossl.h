@@ -11,11 +11,9 @@
  *
  * SPDX-License-Identifier: MPL-2.0
  */
-#include "bench.h"
+#ifndef _DHKEM_OSSL_H_
+#define _DHKEM_OSSL_H_
 
-int main()
-{
-  // bench_x25519();
-  bench_dhkem();
-  return 0;
-}
+int main_dhkem_ossl();
+
+#endif /* _DHKEM_OSSL_H_ */
