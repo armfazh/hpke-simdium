@@ -20,6 +20,7 @@ set(CMAKE_C_STANDARD_REQUIRED True)
 find_package(OpenSSL REQUIRED)
 
 add_subdirectory(third_party/libfaz_ecc_avx2)
+add_subdirectory(bench)
 
 include_directories(third_party/libfaz_ecc_avx2/include)
 link_directories(third_party/libfaz_ecc_avx2/lib)
@@ -33,8 +34,8 @@ elseif (XIMPL STREQUAL "AVX2")
     add_compile_definitions(XIMPL_AVX2)
 endif()
 
-add_compile_options(-Wall -Wextra -Wpedantic -g)
-add_executable(hpke-simdium
+add_compile_options(-Wall -Wextra -Wpedantic)
+add_library(hpke-simdium
     util.c
     types.c
     x25519.c
@@ -42,7 +43,8 @@ add_executable(hpke-simdium
     x25519_avx2.c
     kdf.c
     dhkem.c
-    main.c
 )
 
-target_link_libraries(hpke-simdium OpenSSL::Crypto faz_ecc_avx2)
+add_executable(main main.c)
+add_dependencies(main hpke-simdium)
+target_link_libraries(main hpke-simdium OpenSSL::Crypto faz_ecc_avx2)
