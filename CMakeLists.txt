@@ -34,7 +34,7 @@ elseif (XIMPL STREQUAL "AVX2")
     add_compile_definitions(XIMPL_AVX2)
 endif()
 
-add_compile_options(-Wall -Wextra -Wpedantic)
+add_compile_options(-Werror -Wall -Wextra -O3 -pedantic -std=c99 -m64 -mavx2 -mbmi2 -march=native -mtune=native)
 add_library(hpke-simdium
     util.c
     types.c
