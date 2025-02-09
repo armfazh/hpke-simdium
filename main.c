@@ -1,6 +1,3 @@
-// #include "x25519.h"
-// #include "kdf.h"
-// #include "dhkem.h"
 #include "x25519_ossl.h"
 #include "x25519_bssl.h"
 #include "dhkem_ossl.h"

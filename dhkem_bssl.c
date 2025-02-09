@@ -349,7 +349,7 @@ void bench_dhkem_auth_encapdecap_bssl(void)
                                            pkR.data, pkR.len,
                                            NULL, 0) <= 0)
         {
-            handle_errors("EVP_HPKE_CTX_setup_sender failed");
+            handle_errors("EVP_HPKE_CTX_setup_auth_sender failed");
         }
         EVP_HPKE_CTX_free(sctx);
     });
@@ -362,7 +362,7 @@ void bench_dhkem_auth_encapdecap_bssl(void)
                                               NULL, 0,
                                               pkS.data, pkS.len) <= 0)
         {
-            handle_errors("EVP_HPKE_CTX_setup_recipient failed");
+            handle_errors("EVP_HPKE_CTX_setup_auth_recipient failed");
         }
         EVP_HPKE_CTX_free(rctx);
     });
