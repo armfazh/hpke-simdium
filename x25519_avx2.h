@@ -14,12 +14,9 @@
 #ifndef _X25519_AVX2_H_
 #define _X25519_AVX2_H_
 
-
 #include "types.h"
 
-void keygen_avx2(u8 *sk, u8 *pk);
-void shared_avx2(u8 *shared_secret, u8 *sk, u8 *pk);
-
-int main_x25519_avx2();
+extern struct xdh XDH_x64;
+extern struct xdh XDH_AVX2;
 
 #endif /* _X25519_AVX2_H_ */

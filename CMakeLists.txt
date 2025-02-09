@@ -10,42 +10,46 @@
 #
 # SPDX-License-Identifier: MPL-2.0
 
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.13)
 
 project(hpke-simdium C)
 
+set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED True)
+add_compile_options(-g -Werror -Wall -Wextra -O3 -std=c99 -m64 -mavx2 -mbmi2 -march=native -mtune=native)
 
-find_package(OpenSSL REQUIRED)
+file(GLOB crypto_sources x25519_crypto.c)
 
-add_subdirectory(third_party/libfaz_ecc_avx2)
-add_subdirectory(bench)
+# OpenSSL
+add_library(ossl ${crypto_sources})
+target_compile_definitions(ossl PRIVATE CRYPTO_PROV=0)
+target_include_directories(ossl PRIVATE third_party/ossl/include)
+target_link_libraries(ossl PRIVATE crypto_ossl)
+link_directories(third_party/ossl/lib64)
 
+# BoringSSL
+add_library(bssl ${crypto_sources})
+target_compile_definitions(bssl PRIVATE CRYPTO_PROV=1 BORINGSSL_PREFIX=BSSL_)
+target_include_directories(bssl PRIVATE third_party/bssl/include)
+target_link_libraries(bssl PRIVATE crypto_bssl)
+link_directories(third_party/bssl/lib64)
+
+# faz_ecdh_avx2
 include_directories(third_party/libfaz_ecc_avx2/include)
 link_directories(third_party/libfaz_ecc_avx2/lib)
 
-set(XIMPL "OSSL" CACHE STRING "Implementation of X25519")
-set_property(CACHE XIMPL PROPERTY STRINGS OSSL AVX2)
-
-if (XIMPL STREQUAL "OSSL")
-    add_compile_definitions(XIMPL_OSSL)
-elseif (XIMPL STREQUAL "AVX2")
-    add_compile_definitions(XIMPL_AVX2)
-endif()
-
-add_compile_options(-Werror -Wall -Wextra -O3 -pedantic -std=c99 -m64 -mavx2 -mbmi2 -march=native -mtune=native)
+# hpke-simdium
 add_library(hpke-simdium
-    util.c
     types.c
-    x25519.c
-    x25519_ossl.c
     x25519_avx2.c
+    x25519.c
     kdf.c
     dhkem.c
-    dhkem_ossl.c
 )
+target_link_libraries(hpke-simdium faz_ecc_avx2)
 
 add_executable(main main.c)
-add_dependencies(main hpke-simdium)
-target_link_libraries(main hpke-simdium OpenSSL::Crypto faz_ecc_avx2)
+target_link_libraries(main bssl ossl)
+
+add_subdirectory(bench)

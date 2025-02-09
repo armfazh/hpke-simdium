@@ -11,18 +11,12 @@
  *
  * SPDX-License-Identifier: MPL-2.0
  */
-#ifndef _X25519_H_
-#define _X25519_H_
+#ifndef _X25519_BSSL_H_
+#define _X25519_BSSL_H_
 
 #include "types.h"
 
-struct xdh
-{
-    char *name;
-    void (*keygen)(u8 *sk, u8 *pk);
-    void (*shared)(u8 *shared_secret, u8 *sk, u8 *pk);
-};
+extern struct xdh XDH_bssl;
+void info_bssl(void);
 
-int main_x25519(struct xdh *x);
-
-#endif /* _X25519_H_ */
+#endif /* _X25519_BSSL_H_ */

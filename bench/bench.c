@@ -13,18 +13,16 @@
  */
 #include "bench.h"
 
-#include <openssl/evp.h>
-#include <openssl/err.h>
-#include <openssl/opensslv.h>
+#include <x25519_ossl.h>
+#include <x25519_bssl.h>
 
 int main()
 {
-  OpenSSL_add_all_algorithms();
-  ERR_load_crypto_strings();
+  info_ossl();
+  info_bssl();
 
-  printf("OpenSSL version: %s\n", OPENSSL_VERSION_TEXT);
-
-  // bench_x25519();
+  bench_x25519();
   bench_dhkem();
+
   return 0;
 }

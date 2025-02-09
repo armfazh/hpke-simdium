@@ -13,13 +13,11 @@
  */
 #include "dhkem.h"
 #include "kdf.h"
-#include "x25519.h"
-#include "types.h"
 
 #include <stdio.h>
 #include <string.h>
 
-void extract_and_expand(u8 *shared_secret, u8 *dh, u8 *kem_context)
+static void extract_and_expand(u8 *shared_secret, u8 *dh, u8 *kem_context)
 {
     u8 label_eae = u8_string("eae_prk");
     u8 label_shared_secret = u8_string("shared_secret");
@@ -116,11 +114,11 @@ void auth_decap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR, u8 
     extract_and_expand(shared_secret, &dh, &kem_context);
 }
 
-int main_dhkem()
+int main_dhkem(struct xdh *x)
 {
     u8 skR = u8_malloc(32);
     u8 pkR = u8_malloc(32);
-    keygen(&skR, &pkR);
+    x->keygen(&skR, &pkR);
     printf("skR: ");
     u8_print(&skR);
     printf("pkR: ");
@@ -128,14 +126,14 @@ int main_dhkem()
 
     u8 ss1 = u8_malloc(32);
     u8 enc = u8_malloc(32);
-    encap(&XDH_OSSL, &ss1, &enc, &pkR);
+    encap(x, &ss1, &enc, &pkR);
     printf("ss1: ");
     u8_print(&ss1);
     printf("enc: ");
     u8_print(&enc);
 
     u8 ss2 = u8_malloc(32);
-    decap(&XDH_OSSL, &ss2, &enc, &skR, &pkR);
+    decap(x, &ss2, &enc, &skR, &pkR);
     printf("ss2: ");
     u8_print(&ss2);
 
@@ -149,11 +147,11 @@ int main_dhkem()
     return 0;
 }
 
-int main_auth_dhkem()
+int main_auth_dhkem(struct xdh *x)
 {
     u8 skS = u8_malloc(32);
     u8 pkS = u8_malloc(32);
-    keygen(&skS, &pkS);
+    x->keygen(&skS, &pkS);
     printf("skS: ");
     u8_print(&skS);
     printf("pkS: ");
@@ -161,7 +159,7 @@ int main_auth_dhkem()
 
     u8 skR = u8_malloc(32);
     u8 pkR = u8_malloc(32);
-    keygen(&skR, &pkR);
+    x->keygen(&skR, &pkR);
     printf("skR: ");
     u8_print(&skR);
     printf("pkR: ");
@@ -169,14 +167,14 @@ int main_auth_dhkem()
 
     u8 ss1 = u8_malloc(32);
     u8 enc = u8_malloc(32);
-    auth_encap(&XDH_AVX2, &ss1, &enc, &pkR, &skS, &pkS);
+    auth_encap(x, &ss1, &enc, &pkR, &skS, &pkS);
     printf("ss1: ");
     u8_print(&ss1);
     printf("enc: ");
     u8_print(&enc);
 
     u8 ss2 = u8_malloc(32);
-    auth_decap(&XDH_AVX2, &ss2, &enc, &skR, &pkR, &pkS);
+    auth_decap(x, &ss2, &enc, &skR, &pkR, &pkS);
     printf("ss2: ");
     u8_print(&ss2);
 

@@ -12,58 +12,92 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 #include "kdf.h"
-#include "util.h"
-#include "types.h"
 
 #include <string.h>
 #include <openssl/core_names.h>
-#include <openssl/params.h>
 #include <openssl/evp.h>
+#include <openssl/err.h>
 #include <openssl/kdf.h>
 
 const uint8_t Suite_ID[10] = {'H', 'P', 'K', 'E', 0x00, 0x20, 0x00, 0x01, 0x00, 0x01};
 const uint8_t Version[7] = {'H', 'P', 'K', 'E', '-', 'v', '1'};
 
-void extract(u8 *key, u8 *secret, u8 *salt)
+// Utility to handle errors
+#define handle_errors(msg)                                  \
+    printf("error at %s:%d %s\n", __FILE__, __LINE__, msg); \
+    ERR_print_errors_fp(stderr);                            \
+    exit(1);
+
+static void extract(u8 *key, u8 *secret, u8 *salt)
 {
-    EVP_KDF *kdf = EVP_KDF_fetch(NULL, "HKDF", NULL);
-    EVP_KDF_CTX *ctx = EVP_KDF_CTX_new(kdf);
-    EVP_KDF_free(kdf);
-
-    OSSL_PARAM params[5];
-    params[0] = OSSL_PARAM_construct_utf8_string(OSSL_KDF_PARAM_MODE, "EXTRACT_ONLY", strlen("EXTRACT_ONLY"));
-    params[1] = OSSL_PARAM_construct_utf8_string(OSSL_KDF_PARAM_DIGEST, SN_sha256, strlen(SN_sha256));
-    params[2] = OSSL_PARAM_construct_octet_string(OSSL_KDF_PARAM_KEY, secret->data, secret->len);
-    params[3] = OSSL_PARAM_construct_octet_string(OSSL_KDF_PARAM_SALT, salt->data, salt->len);
-    params[4] = OSSL_PARAM_construct_end();
-
-    if (EVP_KDF_derive(ctx, key->data, key->len, params) <= 0)
+    EVP_PKEY_CTX *ctx = EVP_PKEY_CTX_new_id(EVP_PKEY_HKDF, NULL);
+    if (EVP_PKEY_derive_init(ctx) <= 0)
     {
-        handle_errors("EVP_KDF_derive failed");
+        handle_errors("EVP_PKEY_derive_init failed");
     }
 
-    EVP_KDF_CTX_free(ctx);
+    if (EVP_PKEY_CTX_hkdf_mode(ctx, EVP_PKEY_HKDEF_MODE_EXTRACT_ONLY) <= 0)
+    {
+        handle_errors("EVP_PKEY_CTX_hkdf_mode failed");
+    }
+
+    if (EVP_PKEY_CTX_set_hkdf_md(ctx, EVP_sha256()) <= 0)
+    {
+        handle_errors("EVP_PKEY_CTX_hkdf_mode failed");
+    }
+
+    if (EVP_PKEY_CTX_set1_hkdf_key(ctx, secret->data, secret->len) <= 0)
+    {
+        handle_errors("EVP_PKEY_CTX_set1_hkdf_key failed");
+    }
+
+    if (EVP_PKEY_CTX_set1_hkdf_salt(ctx, salt->data, salt->len) <= 0)
+    {
+        handle_errors("EVP_PKEY_CTX_set1_hkdf_salt failed");
+    }
+
+    if (EVP_PKEY_derive(ctx, key->data, &key->len) <= 0)
+    {
+        handle_errors("EVP_PKEY_derive failed");
+    }
+
+    EVP_PKEY_CTX_free(ctx);
 }
 
-void expand(u8 *out, u8 *key, u8 *info)
+static void expand(u8 *out, u8 *key, u8 *info)
 {
-    EVP_KDF *kdf = EVP_KDF_fetch(NULL, "HKDF", NULL);
-    EVP_KDF_CTX *ctx = EVP_KDF_CTX_new(kdf);
-    EVP_KDF_free(kdf);
-
-    OSSL_PARAM params[5];
-    params[0] = OSSL_PARAM_construct_utf8_string(OSSL_KDF_PARAM_MODE, "EXPAND_ONLY", strlen("EXPAND_ONLY"));
-    params[1] = OSSL_PARAM_construct_utf8_string(OSSL_KDF_PARAM_DIGEST, SN_sha256, strlen(SN_sha256));
-    params[2] = OSSL_PARAM_construct_octet_string(OSSL_KDF_PARAM_KEY, key->data, key->len);
-    params[3] = OSSL_PARAM_construct_octet_string(OSSL_KDF_PARAM_INFO, info->data, info->len);
-    params[4] = OSSL_PARAM_construct_end();
-
-    if (EVP_KDF_derive(ctx, out->data, out->len, params) <= 0)
+    EVP_PKEY_CTX *ctx = EVP_PKEY_CTX_new_id(EVP_PKEY_HKDF, NULL);
+    if (EVP_PKEY_derive_init(ctx) <= 0)
     {
-        handle_errors("EVP_KDF_derive failed");
+        handle_errors("EVP_PKEY_derive_init failed");
     }
 
-    EVP_KDF_CTX_free(ctx);
+    if (EVP_PKEY_CTX_hkdf_mode(ctx, EVP_PKEY_HKDEF_MODE_EXPAND_ONLY) <= 0)
+    {
+        handle_errors("EVP_PKEY_CTX_hkdf_mode failed");
+    }
+
+    if (EVP_PKEY_CTX_set_hkdf_md(ctx, EVP_sha256()) <= 0)
+    {
+        handle_errors("EVP_PKEY_CTX_hkdf_mode failed");
+    }
+
+    if (EVP_PKEY_CTX_set1_hkdf_key(ctx, key->data, key->len) <= 0)
+    {
+        handle_errors("EVP_PKEY_CTX_set1_hkdf_key failed");
+    }
+
+    if (EVP_PKEY_CTX_add1_hkdf_info(ctx, info->data, info->len) <= 0)
+    {
+        handle_errors("EVP_PKEY_CTX_add1_hkdf_info failed");
+    }
+
+    if (EVP_PKEY_derive(ctx, out->data, &out->len) <= 0)
+    {
+        handle_errors("EVP_PKEY_derive failed");
+    }
+
+    EVP_PKEY_CTX_free(ctx);
 }
 
 void labeled_extract(u8 *key, u8 *secret, u8 *salt, u8 *label)

@@ -16,9 +16,6 @@
 
 #include "types.h"
 
-void extract(u8 *key, u8 *secret, u8 *salt);
-void expand(u8 *out, u8 *key, u8 *info);
-
 void labeled_extract(u8 *key, u8 *secret, u8 *salt, u8 *label);
 void labeled_expand(u8 *out, u8 *key, u8 *info, u8 *label);
 

@@ -16,9 +16,7 @@
 
 #include "types.h"
 
-void keygen_ossl(u8 *sk, u8 *pk);
-void shared_ossl(u8 *shared_secret, u8 *sk, u8 *pk);
-
-int main_x25519_ossl();
+extern struct xdh XDH_ossl;
+void info_ossl(void);
 
 #endif /* _X25519_OSSL_H_ */

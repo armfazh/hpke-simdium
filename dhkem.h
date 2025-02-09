@@ -17,7 +17,6 @@
 #include "types.h"
 #include "x25519.h"
 
-void extract_and_expand(u8 *shared_secret, u8 *dh, u8 *kem_context);
 void encap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *pkR);
 void decap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR);
 void auth_encap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *pkR, u8 *skS, u8 *pkS);

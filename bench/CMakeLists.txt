@@ -11,22 +11,12 @@
 # SPDX-License-Identifier: MPL-2.0
 
 include_directories(..)
-include_directories(../third_party/libfaz_ecc_avx2/include)
-link_directories(../third_party/libfaz_ecc_avx2/lib)
 
 add_executable(bench
-        bench.h
         bench.c
-        clocks.h
         clocks.c
         bench_x25519.c
         bench_dhkem.c
 )
 
-find_package(OpenSSL REQUIRED)
-add_dependencies(bench hpke-simdium)
-target_link_libraries(bench
-        hpke-simdium
-        faz_ecc_avx2
-        OpenSSL::Crypto
-)
+target_link_libraries(bench hpke-simdium bssl ossl)
