@@ -19,17 +19,15 @@ set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED True)
 add_compile_options(-g -Werror -Wall -Wextra -O3 -std=c99 -m64 -mavx2 -mbmi2 -march=native -mtune=native)
 
-file(GLOB crypto_sources x25519_crypto.c)
-
 # OpenSSL
-add_library(ossl ${crypto_sources})
+add_library(ossl x25519_crypto.c dhkem_ossl.c)
 target_compile_definitions(ossl PRIVATE CRYPTO_PROV=0)
 target_include_directories(ossl PRIVATE third_party/ossl/include)
 target_link_libraries(ossl PRIVATE crypto_ossl)
 link_directories(third_party/ossl/lib64)
 
 # BoringSSL
-add_library(bssl ${crypto_sources})
+add_library(bssl x25519_crypto.c dhkem_bssl.c)
 target_compile_definitions(bssl PRIVATE CRYPTO_PROV=1 BORINGSSL_PREFIX=BSSL_)
 target_include_directories(bssl PRIVATE third_party/bssl/include)
 target_link_libraries(bssl PRIVATE crypto_bssl)

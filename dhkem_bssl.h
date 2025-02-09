@@ -11,18 +11,12 @@
  *
  * SPDX-License-Identifier: MPL-2.0
  */
-#include "bench.h"
+#ifndef _DHKEM_BSSL_H_
+#define _DHKEM_BSSL_H_
 
-#include <x25519_ossl.h>
-#include <x25519_bssl.h>
+int main_dhkem_bssl(void);
+int main_auth_dhkem_bssl(void);
+void bench_dhkem_encapdecap_bssl(void);
+void bench_dhkem_auth_encapdecap_bssl(void);
 
-int main()
-{
-  info_ossl();
-  info_bssl();
-
-  // bench_x25519();
-  bench_dhkem();
-
-  return 0;
-}
+#endif /* _DHKEM_BSSL_H_ */

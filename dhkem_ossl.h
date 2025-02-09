@@ -14,6 +14,9 @@
 #ifndef _DHKEM_OSSL_H_
 #define _DHKEM_OSSL_H_
 
-int main_dhkem_ossl();
+int main_dhkem_ossl(void);
+int main_auth_dhkem_ossl(void);
+void bench_dhkem_encapdecap_ossl(void);
+void bench_dhkem_auth_encapdecap_ossl(void);
 
 #endif /* _DHKEM_OSSL_H_ */
