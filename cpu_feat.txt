@@ -1,0 +1,16 @@
+# turbo boost
+
+echo "1" >  /sys/devices/system/cpu/intel_pstate/no_turbo
+
+# Hyperthreading
+
+echo "off" >  /sys/devices/system/cpu/smt/control
+
+# performance governor
+
+for i in `seq 0 7`; do echo "performance" > /sys/devices/system/cpu/cpu$i/cpufreq/scaling_governor ; done; 
+
+
+for i in `seq 0 7`; do cat /sys/devices/system/cpu/cpu$i/cpufreq/scaling_governor ; done; 
+
+
