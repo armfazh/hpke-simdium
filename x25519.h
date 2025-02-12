@@ -16,8 +16,7 @@
 
 #include "types.h"
 
-struct xdh
-{
+struct xdh {
     char *name;
     void (*keygen)(u8 *sk, u8 *pk);
     void (*shared)(u8 *shared_secret, u8 *sk, u8 *pk);

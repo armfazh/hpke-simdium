@@ -33,9 +33,9 @@ target_include_directories(bssl PRIVATE third_party/bssl/include)
 target_link_libraries(bssl PRIVATE crypto_bssl)
 link_directories(third_party/bssl/lib64)
 
-# faz_ecdh_avx2
-include_directories(third_party/libfaz_ecc_avx2/include)
-link_directories(third_party/libfaz_ecc_avx2/lib)
+# faz_ecc_avx512
+include_directories(third_party/libfaz_ecc_avx512/include)
+link_directories(third_party/libfaz_ecc_avx512/lib)
 
 # hpke-simdium
 add_library(hpke-simdium

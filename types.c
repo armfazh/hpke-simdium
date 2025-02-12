@@ -28,7 +28,10 @@ u8 u8_malloc(size_t len)
     return out;
 }
 
-void u8_free(u8 *x) { _mm_free(x->data); }
+void u8_free(u8 *x)
+{
+    _mm_free(x->data);
+}
 
 u8 u8_string(char *s)
 {
@@ -48,8 +51,7 @@ void u8_copy(u8 *dst, u8 *src)
 void u8_print(u8 *x)
 {
     size_t i = 0;
-    for (i = 0; i < x->len; i++)
-    {
+    for (i = 0; i < x->len; i++) {
         printf("%02x", x->data[i]);
     }
     printf("\n");

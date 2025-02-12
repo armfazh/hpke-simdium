@@ -17,8 +17,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-typedef struct u8_slice
-{
+typedef struct u8_slice {
     uint8_t *data;
     size_t len;
 } u8;

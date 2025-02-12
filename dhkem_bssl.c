@@ -38,13 +38,11 @@ int main_dhkem_bssl(void)
     const EVP_HPKE_AEAD *aeadID = EVP_hpke_aes_128_gcm();
 
     EVP_HPKE_KEY key;
-    if (EVP_HPKE_KEY_generate(&key, kemID) <= 0)
-    {
+    if (EVP_HPKE_KEY_generate(&key, kemID) <= 0) {
         handle_errors("EVP_HPKE_KEY_generate failed");
     }
 
-    if (EVP_HPKE_KEY_public_key(&key, pkR.data, &pkR.len, EVP_HPKE_MAX_PUBLIC_KEY_LENGTH) <= 0)
-    {
+    if (EVP_HPKE_KEY_public_key(&key, pkR.data, &pkR.len, EVP_HPKE_MAX_PUBLIC_KEY_LENGTH) <= 0) {
         handle_errors("EVP_HPKE_KEY_public_key failed");
     }
 
@@ -53,8 +51,7 @@ int main_dhkem_bssl(void)
     if (EVP_HPKE_CTX_setup_sender(sctx, enc.data, &enc.len, 32,
                                   kemID, kdfID, aeadID,
                                   pkR.data, pkR.len,
-                                  NULL, 0) <= 0)
-    {
+                                  NULL, 0) <= 0) {
         handle_errors("EVP_HPKE_CTX_setup_sender failed");
     }
 
@@ -65,8 +62,7 @@ int main_dhkem_bssl(void)
     const unsigned char *pt = (const unsigned char *)"a message not in a bottle";
     size_t ptlen = strlen((char *)pt);
 
-    if (EVP_HPKE_CTX_seal(sctx, ct, &ctlen, LBUFSIZE, pt, ptlen, NULL, 0) <= 0)
-    {
+    if (EVP_HPKE_CTX_seal(sctx, ct, &ctlen, LBUFSIZE, pt, ptlen, NULL, 0) <= 0) {
         handle_errors("EVP_HPKE_CTX_seal failed");
     }
 
@@ -74,13 +70,11 @@ int main_dhkem_bssl(void)
     if (EVP_HPKE_CTX_setup_recipient(rctx, &key,
                                      kdfID, aeadID,
                                      enc.data, enc.len,
-                                     NULL, 0) <= 0)
-    {
+                                     NULL, 0) <= 0) {
         handle_errors("EVP_HPKE_CTX_setup_recipient failed");
     }
 
-    if (EVP_HPKE_CTX_open(rctx, clear, &clearlen, LBUFSIZE, ct, ctlen, NULL, 0) <= 0)
-    {
+    if (EVP_HPKE_CTX_open(rctx, clear, &clearlen, LBUFSIZE, ct, ctlen, NULL, 0) <= 0) {
         handle_errors("EVP_HPKE_CTX_open failed");
     }
 
@@ -103,24 +97,20 @@ int main_auth_dhkem_bssl(void)
     const EVP_HPKE_AEAD *aeadID = EVP_hpke_aes_128_gcm();
 
     EVP_HPKE_KEY skey;
-    if (EVP_HPKE_KEY_generate(&skey, kemID) <= 0)
-    {
+    if (EVP_HPKE_KEY_generate(&skey, kemID) <= 0) {
         handle_errors("EVP_HPKE_KEY_generate failed");
     }
 
-    if (EVP_HPKE_KEY_public_key(&skey, pkS.data, &pkS.len, EVP_HPKE_MAX_PUBLIC_KEY_LENGTH) <= 0)
-    {
+    if (EVP_HPKE_KEY_public_key(&skey, pkS.data, &pkS.len, EVP_HPKE_MAX_PUBLIC_KEY_LENGTH) <= 0) {
         handle_errors("EVP_HPKE_KEY_public_key failed");
     }
 
     EVP_HPKE_KEY rkey;
-    if (EVP_HPKE_KEY_generate(&rkey, kemID) <= 0)
-    {
+    if (EVP_HPKE_KEY_generate(&rkey, kemID) <= 0) {
         handle_errors("EVP_HPKE_KEY_generate failed");
     }
 
-    if (EVP_HPKE_KEY_public_key(&rkey, pkR.data, &pkR.len, EVP_HPKE_MAX_PUBLIC_KEY_LENGTH) <= 0)
-    {
+    if (EVP_HPKE_KEY_public_key(&rkey, pkR.data, &pkR.len, EVP_HPKE_MAX_PUBLIC_KEY_LENGTH) <= 0) {
         handle_errors("EVP_HPKE_KEY_public_key failed");
     }
 
@@ -129,8 +119,7 @@ int main_auth_dhkem_bssl(void)
     if (EVP_HPKE_CTX_setup_auth_sender(sctx, enc.data, &enc.len, 32,
                                        &skey, kdfID, aeadID,
                                        pkR.data, pkR.len,
-                                       NULL, 0) <= 0)
-    {
+                                       NULL, 0) <= 0) {
         handle_errors("EVP_HPKE_CTX_setup_auth_sender failed");
     }
 
@@ -141,8 +130,7 @@ int main_auth_dhkem_bssl(void)
     const unsigned char *pt = (const unsigned char *)"a message not in a bottle";
     size_t ptlen = strlen((char *)pt);
 
-    if (EVP_HPKE_CTX_seal(sctx, ct, &ctlen, LBUFSIZE, pt, ptlen, NULL, 0) <= 0)
-    {
+    if (EVP_HPKE_CTX_seal(sctx, ct, &ctlen, LBUFSIZE, pt, ptlen, NULL, 0) <= 0) {
         handle_errors("EVP_HPKE_CTX_seal failed");
     }
 
@@ -151,13 +139,11 @@ int main_auth_dhkem_bssl(void)
                                           &rkey, kdfID, aeadID,
                                           enc.data, enc.len,
                                           NULL, 0,
-                                          pkS.data, pkS.len) <= 0)
-    {
+                                          pkS.data, pkS.len) <= 0) {
         handle_errors("EVP_HPKE_CTX_setup_auth_recipient failed");
     }
 
-    if (EVP_HPKE_CTX_open(rctx, clear, &clearlen, LBUFSIZE, ct, ctlen, NULL, 0) <= 0)
-    {
+    if (EVP_HPKE_CTX_open(rctx, clear, &clearlen, LBUFSIZE, ct, ctlen, NULL, 0) <= 0) {
         handle_errors("EVP_HPKE_CTX_open failed");
     }
 
@@ -180,13 +166,11 @@ void bench_dhkem_encapdecap_bssl(void)
     const EVP_HPKE_AEAD *aeadID = EVP_hpke_aes_128_gcm();
 
     EVP_HPKE_KEY key;
-    if (EVP_HPKE_KEY_generate(&key, kemID) <= 0)
-    {
+    if (EVP_HPKE_KEY_generate(&key, kemID) <= 0) {
         handle_errors("EVP_HPKE_KEY_generate failed");
     }
 
-    if (EVP_HPKE_KEY_public_key(&key, pkR.data, &pkR.len, EVP_HPKE_MAX_PUBLIC_KEY_LENGTH) <= 0)
-    {
+    if (EVP_HPKE_KEY_public_key(&key, pkR.data, &pkR.len, EVP_HPKE_MAX_PUBLIC_KEY_LENGTH) <= 0) {
         handle_errors("EVP_HPKE_KEY_public_key failed");
     }
 
@@ -195,8 +179,7 @@ void bench_dhkem_encapdecap_bssl(void)
     if (EVP_HPKE_CTX_setup_sender(sctx, enc.data, &enc.len, 32,
                                   kemID, kdfID, aeadID,
                                   pkR.data, pkR.len,
-                                  NULL, 0) <= 0)
-    {
+                                  NULL, 0) <= 0) {
         handle_errors("EVP_HPKE_CTX_setup_sender failed");
     }
 
@@ -207,8 +190,7 @@ void bench_dhkem_encapdecap_bssl(void)
     const unsigned char *pt = (const unsigned char *)"a message not in a bottle";
     size_t ptlen = strlen((char *)pt);
 
-    if (EVP_HPKE_CTX_seal(sctx, ct, &ctlen, LBUFSIZE, pt, ptlen, NULL, 0) <= 0)
-    {
+    if (EVP_HPKE_CTX_seal(sctx, ct, &ctlen, LBUFSIZE, pt, ptlen, NULL, 0) <= 0) {
         handle_errors("EVP_HPKE_CTX_seal failed");
     }
 
@@ -216,13 +198,11 @@ void bench_dhkem_encapdecap_bssl(void)
     if (EVP_HPKE_CTX_setup_recipient(rctx, &key,
                                      kdfID, aeadID,
                                      enc.data, enc.len,
-                                     NULL, 0) <= 0)
-    {
+                                     NULL, 0) <= 0) {
         handle_errors("EVP_HPKE_CTX_setup_recipient failed");
     }
 
-    if (EVP_HPKE_CTX_open(rctx, clear, &clearlen, LBUFSIZE, ct, ctlen, NULL, 0) <= 0)
-    {
+    if (EVP_HPKE_CTX_open(rctx, clear, &clearlen, LBUFSIZE, ct, ctlen, NULL, 0) <= 0) {
         handle_errors("EVP_HPKE_CTX_open failed");
     }
 
@@ -275,24 +255,20 @@ void bench_dhkem_auth_encapdecap_bssl(void)
     const EVP_HPKE_AEAD *aeadID = EVP_hpke_aes_128_gcm();
 
     EVP_HPKE_KEY skey;
-    if (EVP_HPKE_KEY_generate(&skey, kemID) <= 0)
-    {
+    if (EVP_HPKE_KEY_generate(&skey, kemID) <= 0) {
         handle_errors("EVP_HPKE_KEY_generate failed");
     }
 
-    if (EVP_HPKE_KEY_public_key(&skey, pkS.data, &pkS.len, EVP_HPKE_MAX_PUBLIC_KEY_LENGTH) <= 0)
-    {
+    if (EVP_HPKE_KEY_public_key(&skey, pkS.data, &pkS.len, EVP_HPKE_MAX_PUBLIC_KEY_LENGTH) <= 0) {
         handle_errors("EVP_HPKE_KEY_public_key failed");
     }
 
     EVP_HPKE_KEY rkey;
-    if (EVP_HPKE_KEY_generate(&rkey, kemID) <= 0)
-    {
+    if (EVP_HPKE_KEY_generate(&rkey, kemID) <= 0) {
         handle_errors("EVP_HPKE_KEY_generate failed");
     }
 
-    if (EVP_HPKE_KEY_public_key(&rkey, pkR.data, &pkR.len, EVP_HPKE_MAX_PUBLIC_KEY_LENGTH) <= 0)
-    {
+    if (EVP_HPKE_KEY_public_key(&rkey, pkR.data, &pkR.len, EVP_HPKE_MAX_PUBLIC_KEY_LENGTH) <= 0) {
         handle_errors("EVP_HPKE_KEY_public_key failed");
     }
 
@@ -301,8 +277,7 @@ void bench_dhkem_auth_encapdecap_bssl(void)
     if (EVP_HPKE_CTX_setup_auth_sender(sctx, enc.data, &enc.len, 32,
                                        &skey, kdfID, aeadID,
                                        pkR.data, pkR.len,
-                                       NULL, 0) <= 0)
-    {
+                                       NULL, 0) <= 0) {
         handle_errors("EVP_HPKE_CTX_setup_auth_sender failed");
     }
 
@@ -313,8 +288,7 @@ void bench_dhkem_auth_encapdecap_bssl(void)
     const unsigned char *pt = (const unsigned char *)"a message not in a bottle";
     size_t ptlen = strlen((char *)pt);
 
-    if (EVP_HPKE_CTX_seal(sctx, ct, &ctlen, LBUFSIZE, pt, ptlen, NULL, 0) <= 0)
-    {
+    if (EVP_HPKE_CTX_seal(sctx, ct, &ctlen, LBUFSIZE, pt, ptlen, NULL, 0) <= 0) {
         handle_errors("EVP_HPKE_CTX_seal failed");
     }
 
@@ -323,13 +297,11 @@ void bench_dhkem_auth_encapdecap_bssl(void)
                                           &rkey, kdfID, aeadID,
                                           enc.data, enc.len,
                                           NULL, 0,
-                                          pkS.data, pkS.len) <= 0)
-    {
+                                          pkS.data, pkS.len) <= 0) {
         handle_errors("EVP_HPKE_CTX_setup_auth_recipient failed");
     }
 
-    if (EVP_HPKE_CTX_open(rctx, clear, &clearlen, LBUFSIZE, ct, ctlen, NULL, 0) <= 0)
-    {
+    if (EVP_HPKE_CTX_open(rctx, clear, &clearlen, LBUFSIZE, ct, ctlen, NULL, 0) <= 0) {
         handle_errors("EVP_HPKE_CTX_open failed");
     }
 

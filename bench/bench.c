@@ -18,11 +18,11 @@
 
 int main()
 {
-  info_ossl();
-  info_bssl();
+    info_ossl();
+    info_bssl();
 
-  // bench_x25519();
-  bench_dhkem();
+    bench_x25519();
+    // bench_dhkem();
 
-  return 0;
+    return 0;
 }
