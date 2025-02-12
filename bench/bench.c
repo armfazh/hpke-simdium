@@ -22,7 +22,7 @@ int main()
     info_bssl();
 
     bench_x25519();
-    // bench_dhkem();
+    bench_dhkem();
 
     return 0;
 }

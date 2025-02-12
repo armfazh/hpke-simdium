@@ -43,6 +43,7 @@ add_library(hpke-simdium
     x25519_avx2.c
     x25519.c
     kdf.c
+    dhkem_avx512.c
     dhkem.c
 )
 target_link_libraries(hpke-simdium faz_ecc_avx2)
