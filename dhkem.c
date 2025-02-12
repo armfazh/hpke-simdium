@@ -17,16 +17,6 @@
 #include <stdio.h>
 #include <string.h>
 
-static void extract_and_expand(u8 *shared_secret, u8 *dh, u8 *kem_context)
-{
-    u8 label_eae = u8_string("eae_prk");
-    u8 label_shared_secret = u8_string("shared_secret");
-    u8_static(eae_prk, 32);
-    u8_static(empty_salt, 32);
-    labeled_extract(&eae_prk, dh, &empty_salt, &label_eae);
-    labeled_expand(shared_secret, &eae_prk, kem_context, &label_shared_secret);
-}
-
 void encap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *pkR)
 {
     u8_static(skE, 32);

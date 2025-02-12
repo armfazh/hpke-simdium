@@ -16,8 +16,7 @@
 
 #include "types.h"
 
-void labeled_extract(u8 *key, u8 *secret, u8 *salt, u8 *label);
-void labeled_expand(u8 *out, u8 *key, u8 *info, u8 *label);
+void extract_and_expand(u8 *shared_secret, u8 *dh, u8 *kem_context);
 
 int main_kdf();
 
