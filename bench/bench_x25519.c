@@ -35,8 +35,8 @@ void bench_x25519(void)
     bench_x25519_any(&XDH_AVX2);
     printf("====== X25519 AVX512 ====\n");
     bench_x25519_avx512();
-    printf("====== X25519 BSSL ======\n");
-    bench_x25519_any(&XDH_bssl);
     printf("====== X25519 OSSL ======\n");
     bench_x25519_any(&XDH_ossl);
+    printf("====== X25519 BSSL ======\n");
+    bench_x25519_any(&XDH_bssl);
 }
