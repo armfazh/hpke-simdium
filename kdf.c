@@ -14,7 +14,6 @@
 #include "kdf.h"
 
 #include <string.h>
-#include <openssl/core_names.h>
 #include <openssl/evp.h>
 #include <openssl/err.h>
 #include <openssl/kdf.h>

@@ -66,7 +66,6 @@ void bench_dhkem_authencapdecap(struct xdh *x)
     u8_free(&enc);
 }
 
-
 void bench_dhkem_encapdecap_avx512()
 {
     u8 skR = u8_malloc(32);
@@ -148,7 +147,7 @@ void bench_dhkem(void)
     printf("==== AuthEncapDecap AVX2 ====\n");
     bench_dhkem_authencapdecap(&XDH_AVX2);
     printf("==== AuthEncapDecap AVX512 ====\n");
-    bench_dhkem_encapdecap_avx512();
+    bench_dhkem_authencapdecap_avx512();
     printf("==== AuthEncapDecap OSSL ====\n");
     bench_dhkem_authencapdecap(&XDH_ossl);
     printf("==== AuthEncapDecap BSSL ====\n");
