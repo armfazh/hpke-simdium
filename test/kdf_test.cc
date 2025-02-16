@@ -92,4 +92,9 @@ kdf_test_vector{
     .dh= "142fa012eef059c4076fbcd3207ecba05db92ac66c6a004282c9314ca26d21c8",
     .ct= "af25ac87601286c7e056d1bb4d0cff4917dc3be80e4fdef29aaf7f4fb3cf812c",
     .ss= "b06089b6094f6287ba11fd3ef73f9aaa63f2cda0699c25a58884685249176753",
+},
+kdf_test_vector{
+    .dh= "d6fc59154691ecbf0c7410cbeacf593a98b6968639c6c315d6b61df4fd1791fb",
+    .ct= "",
+    .ss= "911af401ae325c22dc381541a26c925ef816fb62448c573dc6d0aad8440c8cfa",
 }));
