@@ -47,7 +47,7 @@ void encap_avx512(u8 *shared_secret, u8 *enc, u8 *pkR)
     ptr += enc->len;
     memcpy(ptr, pkR->data, pkR->len);
 
-    extract_and_expand(shared_secret, &dh, &kem_context);
+    extract_and_expand_single(shared_secret, &dh, &kem_context);
 }
 
 void decap_avx512(u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR)
@@ -62,7 +62,7 @@ void decap_avx512(u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR)
     ptr += enc->len;
     memcpy(ptr, pkR->data, pkR->len);
 
-    extract_and_expand(shared_secret, &dh, &kem_context);
+    extract_and_expand_single(shared_secret, &dh, &kem_context);
 }
 
 void auth_encap_avx512(u8 *shared_secret, u8 *enc, u8 *pkR, u8 *skS, u8 *pkS)
@@ -103,7 +103,7 @@ void auth_encap_avx512(u8 *shared_secret, u8 *enc, u8 *pkR, u8 *skS, u8 *pkS)
     ptr += pkR->len;
     memcpy(ptr, pkS->data, pkS->len);
 
-    extract_and_expand(shared_secret, &dh, &kem_context);
+    extract_and_expand_single(shared_secret, &dh, &kem_context);
 }
 
 void auth_decap_avx512(u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR, u8 *pkS)
@@ -138,7 +138,7 @@ void auth_decap_avx512(u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR, u8 *pkS)
     ptr += pkR->len;
     memcpy(ptr, pkS->data, pkS->len);
 
-    extract_and_expand(shared_secret, &dh, &kem_context);
+    extract_and_expand_single(shared_secret, &dh, &kem_context);
 }
 
 int main_dhkem_avx512()
