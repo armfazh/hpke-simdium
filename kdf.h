@@ -14,10 +14,17 @@
 #ifndef _KDF_H_
 #define _KDF_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 #include "types.h"
 
 void extract_and_expand(u8 *shared_secret, u8 *dh, u8 *kem_context);
-
 int main_kdf();
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */
 
 #endif /* _KDF_H_ */

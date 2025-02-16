@@ -17,7 +17,7 @@ project(hpke-simdium C)
 set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED True)
-add_compile_options(-Werror -Wall -Wextra -O3 -std=c99 -m64 -mavx2 -mbmi2 -march=native -mtune=native)
+add_compile_options(-Werror -Wall -Wextra -O3 -m64 -mavx2 -mbmi2 -march=native -mtune=native)
 
 # OpenSSL
 add_library(ossl x25519_crypto.c dhkem_ossl.c)
@@ -52,3 +52,6 @@ add_executable(main main.c)
 target_link_libraries(main bssl ossl)
 
 add_subdirectory(bench)
+
+enable_testing()
+add_subdirectory(test)

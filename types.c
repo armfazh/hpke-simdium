@@ -33,6 +33,21 @@ void u8_free(u8 *x)
     _mm_free(x->data);
 }
 
+u8 u8_hex_string(const char *s)
+{
+    int len = strlen(s);
+    u8 out = u8_malloc(len/2);
+    char str[3]= {0};
+    int i=0,b=0;
+    for (i=0; i<len; i+=2) {
+        str[0] = s[i];
+        str[1] = s[i+1];
+        sscanf(str,"%x", &b);
+        out.data[i/2] = b;
+    }
+    return out;
+}
+
 u8 u8_string(char *s)
 {
     u8 out = {
