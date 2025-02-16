@@ -21,6 +21,7 @@ extern "C" {
 #include "types.h"
 
 void extract_and_expand(u8 *shared_secret, u8 *dh, u8 *kem_context);
+void extract_and_expand_single(u8 *shared_secret, u8 *dh, u8 *kem_context);
 int main_kdf();
 
 #ifdef __cplusplus

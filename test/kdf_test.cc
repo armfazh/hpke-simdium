@@ -1,5 +1,17 @@
+/**
+ * This file is part of hpke-simdium.
+ *
+ * Copyright 2025 Armando Faz Hernandez.
+ *
+ * Licensed under the Mozilla Public License, v. 2.0. You may not use this
+ * file except in compliance with the License.
+ * You can obtain a copy of the License at:
+ *
+ * https://www.mozilla.org/en-US/MPL/2.0/
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ */
 #include <gtest/gtest.h>
-#include <iomanip>
 #include <kdf.h>
 
 static std::string u8_to_string(u8 *x)
@@ -50,6 +62,20 @@ TEST_P(KDF,extract_and_expand)
     u8 ct = u8_hex_string(v.ct);
     u8 ss_want = u8_hex_string(v.ss);
     extract_and_expand(&ss_got,&dh,&ct);
+    EXPECT_PRED_FORMAT2(u8_cmp,&ss_got,&ss_want);
+    u8_free(&dh);
+    u8_free(&ct);
+    u8_free(&ss_want);
+}
+
+TEST_P(KDF,extract_and_expand_single)
+{
+    kdf_test_vector v = GetParam();
+    u8_static(ss_got,32);
+    u8 dh = u8_hex_string(v.dh);
+    u8 ct = u8_hex_string(v.ct);
+    u8 ss_want = u8_hex_string(v.ss);
+    extract_and_expand_single(&ss_got,&dh,&ct);
     EXPECT_PRED_FORMAT2(u8_cmp,&ss_got,&ss_want);
     u8_free(&dh);
     u8_free(&ct);
