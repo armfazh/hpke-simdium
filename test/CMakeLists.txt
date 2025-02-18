@@ -13,8 +13,9 @@ FetchContent_MakeAvailable(googletest)
 
 include_directories(..)
 link_directories(..)
-add_executable(kdf_test kdf_test.cc)
-target_link_libraries(kdf_test hpke-simdium crypto GTest::gtest_main)
+add_executable(kdf_test kdf_test.cc ../kdf_ossl.c ../kdf.c ../types.c)
+target_link_libraries(kdf_test crypto_ossl GTest::gtest_main)
+target_link_directories(kdf_test PRIVATE ../third_party/ossl/lib64)
 
 include(GoogleTest)
 gtest_discover_tests(kdf_test)

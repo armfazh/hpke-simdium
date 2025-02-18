@@ -13,18 +13,14 @@
  */
 #include "dhkem_avx512.h"
 
-#include <stdio.h>
 #include <string.h>
-
-#include "kdf.h"
 #include <faz_ecdh_avx2.h>
 
-void encap_avx512(u8 *shared_secret, u8 *enc, u8 *pkR)
+void encap_avx512(u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR)
 {
     u8_static(gen, 32);
     u8_static(skE, 32);
     u8_static(pkE, 32);
-    u8_static(dh, 32);
     struct X25519_KEY_x2 ss, sk, pk;
 
     gen.data[0] = 9;
@@ -37,41 +33,27 @@ void encap_avx512(u8 *shared_secret, u8 *enc, u8 *pkR)
 
     X25519_AVX512.shared(&ss,&pk,&sk);
     memcpy(pkE.data,ss.k0,pkE.len);
-    memcpy(dh.data,ss.k1,dh.len);
-    // x->keygen(&skE, &pkE);
-    // x->shared(&dh, &skE, pkR);
+    memcpy(dh->data,ss.k1,32);
     u8_copy(enc, &pkE);
 
-    u8_static(kem_context, 2 * 32);
-    uint8_t *ptr = kem_context.data;
-    memcpy(ptr, enc->data, enc->len);
-    ptr += enc->len;
-    memcpy(ptr, pkR->data, pkR->len);
-
-    extract_and_expand_single(shared_secret, &dh, &kem_context);
+    uint8_t *kc = kem_context->data;
+    u8_append(&kc,enc);
+    u8_append(&kc,pkR);
 }
 
-void decap_avx512(u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR)
+void decap_avx512(u8 *dh, u8 *kem_context, u8 *enc, u8 *skR, u8 *pkR)
 {
-    u8_static(dh, 32);
-    X25519_AVX2.shared(dh.data, skR->data, enc->data);
-    // x->shared(&dh, skR, enc);
+    X25519_AVX2.shared(dh->data, skR->data, enc->data);
 
-    u8_static(kem_context, 2 * 32);
-    uint8_t *ptr = kem_context.data;
-    memcpy(ptr, enc->data, enc->len);
-    ptr += enc->len;
-    memcpy(ptr, pkR->data, pkR->len);
-
-    extract_and_expand_single(shared_secret, &dh, &kem_context);
+    uint8_t *kc = kem_context->data;
+    u8_append(&kc,enc);
+    u8_append(&kc,pkR);
 }
 
-void auth_encap_avx512(u8 *shared_secret, u8 *enc, u8 *pkR, u8 *skS, u8 *pkS)
+void auth_encap_avx512(u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR, u8 *skS, u8 *pkS)
 {
     u8_static(skE, 32);
     u8_static(pkE, 32);
-    u8_static(dh1, 32);
-    u8_static(dh2, 32);
 
     X25519_AVX2.keygen(skE.data, pkE.data);
 
@@ -83,35 +65,18 @@ void auth_encap_avx512(u8 *shared_secret, u8 *enc, u8 *pkR, u8 *skS, u8 *pkS)
     memcpy(pk.k1,pkR->data,pkR->len);
 
     X25519_AVX512.shared(&ss,&pk,&sk);
-    memcpy(dh1.data,ss.k1,dh1.len);
-    memcpy(dh2.data,ss.k1,dh2.len);
-    // x->shared(&dh1, &skE, pkR);
-    // x->shared(&dh2, skS, pkR);
-
-    u8_static(dh, 2 * 32);
-    uint8_t *ptr = dh.data;
-    memcpy(ptr, dh1.data, dh1.len);
-    ptr += dh1.len;
-    memcpy(ptr, dh2.data, dh2.len);
-
+    memcpy(&dh->data[0], ss.k0,32);
+    memcpy(&dh->data[32],ss.k1,32);
     u8_copy(enc, &pkE);
 
-    u8_static(kem_context, 3 * 32);
-    ptr = kem_context.data;
-    memcpy(ptr, enc->data, enc->len);
-    ptr += enc->len;
-    memcpy(ptr, pkR->data, pkR->len);
-    ptr += pkR->len;
-    memcpy(ptr, pkS->data, pkS->len);
-
-    extract_and_expand_single(shared_secret, &dh, &kem_context);
+    uint8_t *kc = kem_context->data;
+    u8_append(&kc,enc);
+    u8_append(&kc,pkR);
+    u8_append(&kc,pkS);
 }
 
-void auth_decap_avx512(u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR, u8 *pkS)
+void auth_decap_avx512(u8 *dh, u8 *kem_context, u8 *enc, u8 *skR, u8 *pkR, u8 *pkS)
 {
-    u8_static(dh1, 32);
-    u8_static(dh2, 32);
-
     struct X25519_KEY_x2 ss, sk, pk;
     memcpy(sk.k0,skR->data,skR->len);
     memcpy(sk.k1,skR->data,skR->len);
@@ -120,24 +85,11 @@ void auth_decap_avx512(u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR, u8 *pkS)
     memcpy(pk.k1,pkS->data,pkS->len);
 
     X25519_AVX512.shared(&ss,&pk,&sk);
-    memcpy(dh1.data,ss.k1,dh1.len);
-    memcpy(dh2.data,ss.k1,dh2.len);
-    // x->shared(&dh1, skR, enc);
-    // x->shared(&dh2, skR, pkS);
+    memcpy(&dh->data[0], ss.k0,32);
+    memcpy(&dh->data[32],ss.k1,32);
 
-    u8_static(dh, 2 * 32);
-    uint8_t *ptr = dh.data;
-    memcpy(ptr, dh1.data, dh1.len);
-    ptr += dh1.len;
-    memcpy(ptr, dh2.data, dh2.len);
-
-    u8_static(kem_context, 3 * 32);
-    ptr = kem_context.data;
-    memcpy(ptr, enc->data, enc->len);
-    ptr += enc->len;
-    memcpy(ptr, pkR->data, pkR->len);
-    ptr += pkR->len;
-    memcpy(ptr, pkS->data, pkS->len);
-
-    extract_and_expand_single(shared_secret, &dh, &kem_context);
+    uint8_t *kc = kem_context->data;
+    u8_append(&kc,enc);
+    u8_append(&kc,pkR);
+    u8_append(&kc,pkS);
 }

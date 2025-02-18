@@ -26,7 +26,6 @@ link_directories(third_party/libfaz_ecc_avx512/lib)
 # hpke-simdium
 add_library(hpke-simdium-common OBJECT
     types.c
-    kdf.c
 )
 
 add_library(hpke-simdium
@@ -35,7 +34,6 @@ add_library(hpke-simdium
     dhkem_avx512.c
 )
 target_link_libraries(hpke-simdium faz_ecc_avx2)
-
 
 # Tools
 add_subdirectory(bench)

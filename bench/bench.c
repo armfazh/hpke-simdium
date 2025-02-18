@@ -7,6 +7,7 @@ void bench_x25519(struct xdh *x)
     u8_static(pk, 32);
     u8_static(ss, 32);
     x->keygen(&sk, &pk);
+    x->shared(&ss, &sk, &pk);
 
     oper_second(, keygen, x->keygen(&sk, &pk));
     oper_second(, shared, x->shared(&ss, &sk, &pk));
@@ -18,22 +19,21 @@ void bench_dhkem_encapdecap(struct xdh *x)
     u8 pkR = u8_malloc(32);
     x->keygen(&skR, &pkR);
 
-    u8 ss1 = u8_malloc(32);
+    u8 dh = u8_malloc(32);
+    u8 kc = u8_malloc(2*32);
     u8 enc = u8_malloc(32);
-    encap(x, &ss1, &enc, &pkR);
-
-    u8 ss2 = u8_malloc(32);
-    decap(x, &ss2, &enc, &skR, &pkR);
+    encap(x, &dh, &kc, &enc, &pkR);
+    decap(x, &dh, &kc, &enc, &skR, &pkR);
 
     oper_second(, keygen, x->keygen(&skR, &pkR));
-    oper_second(, encap, encap(x, &ss1, &enc, &pkR));
-    oper_second(, decap, decap(x, &ss2, &enc, &skR, &pkR));
+    oper_second(, encap, encap(x, &dh, &kc, &enc, &pkR));
+    oper_second(, decap, decap(x, &dh, &kc, &enc, &skR, &pkR));
 
     u8_free(&skR);
     u8_free(&pkR);
 
-    u8_free(&ss1);
-    u8_free(&ss2);
+    u8_free(&dh);
+    u8_free(&kc);
     u8_free(&enc);
 }
 
@@ -47,16 +47,15 @@ void bench_dhkem_authencapdecap(struct xdh *x)
     u8 pkR = u8_malloc(32);
     x->keygen(&skR, &pkR);
 
-    u8 ss1 = u8_malloc(32);
+    u8 dh = u8_malloc(2*32);
+    u8 kc = u8_malloc(3*32);
     u8 enc = u8_malloc(32);
-    auth_encap(x, &ss1, &enc, &pkR, &skS, &pkS);
-
-    u8 ss2 = u8_malloc(32);
-    auth_decap(x, &ss2, &enc, &skR, &pkR, &pkS);
+    auth_encap(x, &dh, &kc, &enc, &pkR, &skS, &pkS);
+    auth_decap(x, &dh, &kc, &enc, &skR, &pkR, &pkS);
 
     oper_second(, keygen, x->keygen(&skR, &pkR));
-    oper_second(, auth_encap, auth_encap(x, &ss1, &enc, &pkR, &skS, &pkS));
-    oper_second(, auth_decap, auth_decap(x, &ss2, &enc, &skR, &pkR, &pkS));
+    oper_second(, auth_encap, auth_encap(x, &dh, &kc, &enc, &pkR, &skS, &pkS));
+    oper_second(, auth_decap, auth_decap(x, &dh, &kc, &enc, &skR, &pkR, &pkS));
 
     u8_free(&skS);
     u8_free(&pkS);
@@ -64,8 +63,8 @@ void bench_dhkem_authencapdecap(struct xdh *x)
     u8_free(&skR);
     u8_free(&pkR);
 
-    u8_free(&ss1);
-    u8_free(&ss2);
+    u8_free(&dh);
+    u8_free(&kc);
     u8_free(&enc);
 }
 

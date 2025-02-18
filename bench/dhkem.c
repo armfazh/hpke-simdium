@@ -12,44 +12,31 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 #include "dhkem.h"
-#include "kdf.h"
 
-#include <string.h>
-
-void encap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *pkR)
+void encap(struct xdh *x, u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR)
 {
     u8_static(skE, 32);
     u8_static(pkE, 32);
-    u8_static(dh, 32);
 
     x->keygen(&skE, &pkE);
-    x->shared(&dh, &skE, pkR);
+    x->shared(dh, &skE, pkR);
     u8_copy(enc, &pkE);
 
-    u8_static(kem_context, 2 * 32);
-    uint8_t *ptr = kem_context.data;
-    memcpy(ptr, enc->data, enc->len);
-    ptr += enc->len;
-    memcpy(ptr, pkR->data, pkR->len);
-
-    extract_and_expand_single(shared_secret, &dh, &kem_context);
+    uint8_t *kc = kem_context->data;
+    u8_append(&kc,enc);
+    u8_append(&kc,pkR);
 }
 
-void decap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR)
+void decap(struct xdh *x, u8 *dh, u8 *kem_context, u8 *enc, u8 *skR, u8 *pkR)
 {
-    u8_static(dh, 32);
-    x->shared(&dh, skR, enc);
+    x->shared(dh, skR, enc);
 
-    u8_static(kem_context, 2 * 32);
-    uint8_t *ptr = kem_context.data;
-    memcpy(ptr, enc->data, enc->len);
-    ptr += enc->len;
-    memcpy(ptr, pkR->data, pkR->len);
-
-    extract_and_expand_single(shared_secret, &dh, &kem_context);
+    uint8_t *kc = kem_context->data;
+    u8_append(&kc,enc);
+    u8_append(&kc,pkR);
 }
 
-void auth_encap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *pkR, u8 *skS, u8 *pkS)
+void auth_encap(struct xdh *x, u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR, u8 *skS, u8 *pkS)
 {
     u8_static(skE, 32);
     u8_static(pkE, 32);
@@ -59,46 +46,31 @@ void auth_encap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *pkR, u8 *skS, u8 
     x->keygen(&skE, &pkE);
     x->shared(&dh1, &skE, pkR);
     x->shared(&dh2, skS, pkR);
-
-    u8_static(dh, 2 * 32);
-    uint8_t *ptr = dh.data;
-    memcpy(ptr, dh1.data, dh1.len);
-    ptr += dh1.len;
-    memcpy(ptr, dh2.data, dh2.len);
-
     u8_copy(enc, &pkE);
 
-    u8_static(kem_context, 3 * 32);
-    ptr = kem_context.data;
-    memcpy(ptr, enc->data, enc->len);
-    ptr += enc->len;
-    memcpy(ptr, pkR->data, pkR->len);
-    ptr += pkR->len;
-    memcpy(ptr, pkS->data, pkS->len);
+    uint8_t *dh1_dh2 = dh->data;
+    u8_append(&dh1_dh2,&dh1);
+    u8_append(&dh1_dh2,&dh2);
 
-    extract_and_expand_single(shared_secret, &dh, &kem_context);
+    uint8_t *kc = kem_context->data;
+    u8_append(&kc,enc);
+    u8_append(&kc,pkR);
+    u8_append(&kc,pkS);
 }
 
-void auth_decap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR, u8 *pkS)
+void auth_decap(struct xdh *x, u8 *dh, u8 *kem_context, u8 *enc, u8 *skR, u8 *pkR, u8 *pkS)
 {
     u8_static(dh1, 32);
     u8_static(dh2, 32);
     x->shared(&dh1, skR, enc);
     x->shared(&dh2, skR, pkS);
 
-    u8_static(dh, 2 * 32);
-    uint8_t *ptr = dh.data;
-    memcpy(ptr, dh1.data, dh1.len);
-    ptr += dh1.len;
-    memcpy(ptr, dh2.data, dh2.len);
+    uint8_t *dh1_dh2 = dh->data;
+    u8_append(&dh1_dh2,&dh1);
+    u8_append(&dh1_dh2,&dh2);
 
-    u8_static(kem_context, 3 * 32);
-    ptr = kem_context.data;
-    memcpy(ptr, enc->data, enc->len);
-    ptr += enc->len;
-    memcpy(ptr, pkR->data, pkR->len);
-    ptr += pkR->len;
-    memcpy(ptr, pkS->data, pkS->len);
-
-    extract_and_expand_single(shared_secret, &dh, &kem_context);
+    uint8_t *kc = kem_context->data;
+    u8_append(&kc,enc);
+    u8_append(&kc,pkR);
+    u8_append(&kc,pkS);
 }

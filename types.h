@@ -28,10 +28,12 @@ typedef struct u8_slice {
 
 u8 u8_malloc(size_t len);
 void u8_free(u8 *x);
-void u8_print(u8 *x);
 u8 u8_hex_string(const char *s);
 u8 u8_string(char *s);
-void u8_copy(u8 *dst, u8 *src);
+void u8_copy(u8 *dst,const  u8 *src);
+void u8_print(const u8 *x);
+void u8_append(uint8_t**head,const u8* x);
+void u8_append_array(uint8_t* *head, const uint8_t* data, size_t len);
 
 #define u8_static(name, length)        \
     uint8_t name##_data[length] = {0}; \

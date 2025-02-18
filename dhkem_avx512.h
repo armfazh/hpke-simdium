@@ -20,10 +20,10 @@ extern "C" {
 
 #include "types.h"
 
-void encap_avx512(u8 *shared_secret, u8 *enc, u8 *pkR);
-void decap_avx512(u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR);
-void auth_encap_avx512(u8 *shared_secret, u8 *enc, u8 *pkR, u8 *skS, u8 *pkS);
-void auth_decap_avx512(u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR, u8 *pkS);
+void encap_avx512(u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR);
+void decap_avx512(u8 *dh, u8 *kem_context, u8 *enc, u8 *skR, u8 *pkR);
+void auth_encap_avx512(u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR, u8 *skS, u8 *pkS);
+void auth_decap_avx512(u8 *dh, u8 *kem_context, u8 *enc, u8 *skR, u8 *pkR, u8 *pkS);
 
 #ifdef __cplusplus
 } /* extern "C" */

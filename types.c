@@ -57,17 +57,29 @@ u8 u8_string(char *s)
     return out;
 }
 
-void u8_copy(u8 *dst, u8 *src)
+void u8_copy(u8 *dst, const u8 *src)
 {
     dst->len = src->len;
     memcpy(dst->data, src->data, src->len);
 }
 
-void u8_print(u8 *x)
+void u8_print(const u8 *x)
 {
     size_t i = 0;
     for (i = 0; i < x->len; i++) {
         printf("%02x", x->data[i]);
     }
     printf("\n");
+}
+
+void u8_append(uint8_t* *head,const u8* x)
+{
+    memcpy(*head, x->data, x->len);
+    *head += x->len;
+}
+
+void u8_append_array(uint8_t* *head, const uint8_t* data, size_t len)
+{
+    memcpy(*head, data, len);
+    *head += len;
 }
