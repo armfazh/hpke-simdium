@@ -15,15 +15,16 @@
 #define _DHKEM_H_
 
 #include "types.h"
-#include "bench.h"
 
+struct xdh {
+    char *name;
+    void (*keygen)(u8 *sk, u8 *pk);
+    void (*shared)(u8 *shared_secret, u8 *sk, u8 *pk);
+};
 
 void encap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *pkR);
 void decap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR);
 void auth_encap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *pkR, u8 *skS, u8 *pkS);
 void auth_decap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR, u8 *pkS);
-
-int main_dhkem();
-int main_auth_dhkem();
 
 #endif /* _DHKEM_H_ */

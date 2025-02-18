@@ -17,10 +17,9 @@ include_directories(..)
 add_executable(bench_ossl
     $<TARGET_OBJECTS:hpke-simdium-common>
     bench_ossl.c
-    bench_x25519.c
-    bench_dhkem.c
-    dhkem.c
     x25519_crypto.c
+    dhkem.c
+    bench.c
     clocks.c
 )
 target_include_directories(bench_ossl PRIVATE ../third_party/ossl/include)
@@ -32,10 +31,9 @@ target_link_directories(bench_ossl PRIVATE ../third_party/ossl/lib64)
 add_executable(bench_bssl
     $<TARGET_OBJECTS:hpke-simdium-common>
     bench_bssl.c
-    bench_x25519.c
-    bench_dhkem.c
-    dhkem.c
     x25519_crypto.c
+    dhkem.c
+    bench.c
     clocks.c
 )
 target_compile_definitions(bench_bssl PRIVATE CRYPTO_PROV=1 BORINGSSL_PREFIX=BSSL_)
@@ -45,9 +43,8 @@ target_link_directories(bench_bssl PRIVATE ../third_party/bssl/lib64)
 
 add_executable(bench_avx2
     bench_avx2.c
-    bench_x25519.c
-    bench_dhkem.c
     dhkem.c
+    bench.c
     clocks.c
 )
 

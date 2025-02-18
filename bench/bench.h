@@ -14,13 +14,7 @@
 #ifndef _BENCH_H_
 #define _BENCH_H_
 
-#include "types.h"
-
-struct xdh {
-    char *name;
-    void (*keygen)(u8 *sk, u8 *pk);
-    void (*shared)(u8 *shared_secret, u8 *sk, u8 *pk);
-};
+#include "dhkem.h"
 
 void bench_dhkem(void);
 void bench_x25519(struct xdh *x);

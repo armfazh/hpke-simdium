@@ -14,7 +14,7 @@
 #ifndef _X25519_OSSL_H_
 #define _X25519_OSSL_H_
 
-#include "types.h"
+#include "dhkem.h"
 
 extern struct xdh XDH_ossl;
 void info_ossl(void);

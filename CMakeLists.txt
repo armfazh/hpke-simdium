@@ -19,20 +19,6 @@ set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED True)
 add_compile_options(-Werror -Wall -Wextra -O3 -m64 -mavx2 -mbmi2 -march=native -mtune=native)
 
-# OpenSSL
-# add_library(ossl x25519_crypto.c dhkem_ossl.c)
-# target_compile_definitions(ossl PRIVATE CRYPTO_PROV=0)
-# target_include_directories(ossl PRIVATE third_party/ossl/include)
-# target_link_libraries(ossl PRIVATE crypto_ossl)
-# link_directories(third_party/ossl/lib64)
-
-# BoringSSL
-# add_library(bssl x25519_crypto.c dhkem_bssl.c)
-# target_compile_definitions(bssl PRIVATE CRYPTO_PROV=1 BORINGSSL_PREFIX=BSSL_)
-# target_include_directories(bssl PRIVATE third_party/bssl/include)
-# target_link_libraries(bssl PRIVATE crypto_bssl)
-# link_directories(third_party/bssl/lib64)
-
 # faz_ecc_avx512
 include_directories(third_party/libfaz_ecc_avx512/include)
 link_directories(third_party/libfaz_ecc_avx512/lib)
@@ -50,9 +36,8 @@ add_library(hpke-simdium
 )
 target_link_libraries(hpke-simdium faz_ecc_avx2)
 
-# add_executable(main main.c)
-# target_link_libraries(main bssl ossl)
 
+# Tools
 add_subdirectory(bench)
 
 enable_testing()

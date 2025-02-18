@@ -14,7 +14,7 @@
 #ifndef _X25519_BSSL_H_
 #define _X25519_BSSL_H_
 
-#include "types.h"
+#include "dhkem.h"
 
 extern struct xdh XDH_bssl;
 void info_bssl(void);

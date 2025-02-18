@@ -13,10 +13,12 @@
  */
 
 #include "bench.h"
-#include "clocks.h"
+
 #include <dhkem_avx2.h>
 #include <dhkem_avx512.h>
 #include <faz_ecdh_avx2.h>
+
+#include "clocks.h"
 
 static void keygen_x64(u8 *sk, u8 *pk)
 {
