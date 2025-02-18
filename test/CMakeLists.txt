@@ -10,12 +10,20 @@ FetchContent_Declare(
 )
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
+include(GoogleTest)
 
 include_directories(..)
-link_directories(..)
-add_executable(kdf_test kdf_test.cc ../kdf_ossl.c ../kdf.c ../types.c)
-target_link_libraries(kdf_test crypto_ossl GTest::gtest_main)
-target_link_directories(kdf_test PRIVATE ../third_party/ossl/lib64)
 
-include(GoogleTest)
-gtest_discover_tests(kdf_test)
+add_executable(kdf_ossl kdf_test.cc ../kdf_ossl.c ../kdf.c ../types.c)
+target_include_directories(kdf_ossl PRIVATE ../third_party/ossl/include)
+target_link_libraries(kdf_ossl PRIVATE crypto_ossl GTest::gtest_main)
+target_link_directories(kdf_ossl PRIVATE ../third_party/ossl/lib64)
+gtest_discover_tests(kdf_ossl)
+
+add_executable(kdf_bssl kdf_test.cc ../kdf_bssl.c ../kdf.c ../types.c)
+target_compile_definitions(kdf_bssl PRIVATE BORINGSSL_PREFIX=BSSL_)
+target_include_directories(kdf_bssl PRIVATE ../third_party/bssl/include)
+target_link_libraries(kdf_bssl PRIVATE crypto_bssl GTest::gtest_main)
+target_link_directories(kdf_bssl PRIVATE ../third_party/bssl/lib64)
+gtest_discover_tests(kdf_bssl)
+

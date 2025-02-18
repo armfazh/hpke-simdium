@@ -20,12 +20,12 @@ extern "C" {
 
 #include "types.h"
 
-void extract_and_expand(u8 *shared_secret, u8 *dh, u8 *kem_context);
-void extract_and_expand_single(u8 *shared_secret, u8 *dh, u8 *kem_context);
+void extract_and_expand(u8 *shared_secret, const u8 *dh, const u8 *kem_context);
+void extract_and_expand_single(u8 *shared_secret, const u8 *dh, const u8 *kem_context);
 
-extern void hkdf_extract(u8 *key, u8 *secret, u8 *salt);
-extern void hkdf_expand(u8 *out, u8 *key, u8 *info);
-extern void hkdf_extract_expand(u8 *out, u8 *secret,  u8 *info);
+extern void hkdf_extract(u8 *key, const u8 *secret, const u8 *salt);
+extern void hkdf_expand(u8 *out, const u8 *key, const u8 *info);
+extern void hkdf_extract_expand(u8 *out, const u8 *secret, const u8 *info);
 
 #ifdef __cplusplus
 } /* extern "C" */

@@ -22,7 +22,7 @@
     ERR_print_errors_fp(stderr);                            \
     exit(1);
 
-void hkdf_extract(u8 *key, u8 *secret, u8 *salt)
+void hkdf_extract(u8 *key, const u8 *secret, const u8 *salt)
 {
     EVP_PKEY_CTX *ctx = EVP_PKEY_CTX_new_id(EVP_PKEY_HKDF, NULL);
     if (EVP_PKEY_derive_init(ctx) <= 0) {
@@ -52,7 +52,7 @@ void hkdf_extract(u8 *key, u8 *secret, u8 *salt)
     EVP_PKEY_CTX_free(ctx);
 }
 
-void hkdf_expand(u8 *out, u8 *key, u8 *info)
+void hkdf_expand(u8 *out, const u8 *key, const u8 *info)
 {
     EVP_PKEY_CTX *ctx = EVP_PKEY_CTX_new_id(EVP_PKEY_HKDF, NULL);
     if (EVP_PKEY_derive_init(ctx) <= 0) {
@@ -82,7 +82,7 @@ void hkdf_expand(u8 *out, u8 *key, u8 *info)
     EVP_PKEY_CTX_free(ctx);
 }
 
-void hkdf_extract_expand(u8 *out, u8 *secret,  u8 *info)
+void hkdf_extract_expand(u8 *out, const u8 *secret, const u8 *info)
 {
     EVP_PKEY_CTX *ctx = EVP_PKEY_CTX_new_id(EVP_PKEY_HKDF, NULL);
     if (EVP_PKEY_derive_init(ctx) <= 0) {
