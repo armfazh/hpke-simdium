@@ -15,7 +15,8 @@
 #define _DHKEM_H_
 
 #include "types.h"
-#include "x25519.h"
+#include "bench.h"
+
 
 void encap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *pkR);
 void decap(struct xdh *x, u8 *shared_secret, u8 *enc, u8 *skR, u8 *pkR);

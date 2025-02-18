@@ -14,7 +14,17 @@
 #ifndef _BENCH_H_
 #define _BENCH_H_
 
-void bench_x25519(void);
+#include "types.h"
+
+struct xdh {
+    char *name;
+    void (*keygen)(u8 *sk, u8 *pk);
+    void (*shared)(u8 *shared_secret, u8 *sk, u8 *pk);
+};
+
 void bench_dhkem(void);
+void bench_x25519(struct xdh *x);
+void bench_dhkem_encapdecap(struct xdh *x);
+void bench_dhkem_authencapdecap(struct xdh *x);
 
 #endif /* _BENCH_H_ */

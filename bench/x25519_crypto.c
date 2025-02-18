@@ -12,7 +12,7 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-#include "x25519.h"
+#include "bench.h"
 
 #include <openssl/err.h>
 #include <openssl/evp.h>

@@ -11,11 +11,12 @@
  *
  * SPDX-License-Identifier: MPL-2.0
  */
-#include "dhkem.h"
-#include "kdf.h"
+#include "dhkem_avx512.h"
 
 #include <stdio.h>
 #include <string.h>
+
+#include "kdf.h"
 #include <faz_ecdh_avx2.h>
 
 void encap_avx512(u8 *shared_secret, u8 *enc, u8 *pkR)

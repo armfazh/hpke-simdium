@@ -11,14 +11,17 @@
  *
  * SPDX-License-Identifier: MPL-2.0
  */
-#include "dhkem_ossl.h"
+#include "x25519_ossl.h"
 
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
+
 #include <openssl/evp.h>
 #include <openssl/hpke.h>
-#include "bench/clocks.h"
+
+#include "clocks.h"
+#include "bench.h"
 
 #define LBUFSIZE 48
 
@@ -312,4 +315,27 @@ err:
 
     EVP_PKEY_free(skS);
     EVP_PKEY_free(skR);
+}
+
+int main(void)
+{
+    info_ossl();
+
+    printf("==== Benchmarking DH ====\n");
+    printf("====== X25519 OSSL ======\n");
+    bench_x25519(&XDH_ossl);
+
+    printf("===== Benchmarking DHKEM ====\n");
+    printf("====== EncapDecap OSSL ======\n");
+    bench_dhkem_encapdecap(&XDH_ossl);
+    printf("==== HPKE OSSL ====\n");
+    bench_dhkem_encapdecap_ossl();
+
+    printf("===== Benchmarking AuthDHKEM ====\n");
+    printf("==== AuthEncapDecap OSSL ====\n");
+    bench_dhkem_authencapdecap(&XDH_ossl);
+    printf("==== HPKE OSSL ====\n");
+    bench_dhkem_auth_encapdecap_ossl();
+
+    return 0;
 }

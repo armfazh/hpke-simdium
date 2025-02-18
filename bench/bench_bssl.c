@@ -11,15 +11,17 @@
  *
  * SPDX-License-Identifier: MPL-2.0
  */
-#include "dhkem_bssl.h"
-#include "types.h"
+
+#include "x25519_bssl.h"
 
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
 #include <openssl/err.h>
 #include <openssl/hpke.h>
-#include "bench/clocks.h"
+
+#include "clocks.h"
+#include "bench.h"
 
 #define LBUFSIZE 48
 
@@ -341,4 +343,27 @@ void bench_dhkem_auth_encapdecap_bssl(void)
 
     EVP_HPKE_KEY_cleanup(&skey);
     EVP_HPKE_KEY_cleanup(&rkey);
+}
+
+int main(void)
+{
+    info_bssl();
+
+    printf("==== Benchmarking DH ====\n");
+    printf("====== X25519 BSSL ======\n");
+    bench_x25519(&XDH_bssl);
+
+    printf("===== Benchmarking DHKEM ====\n");
+    printf("====== EncapDecap BSSL ======\n");
+    bench_dhkem_encapdecap(&XDH_bssl);
+    printf("==== HPKE OSSL ====\n");
+    bench_dhkem_encapdecap_bssl();
+
+    printf("===== Benchmarking AuthDHKEM ====\n");
+    printf("==== AuthEncapDecap BSSL ====\n");
+    bench_dhkem_authencapdecap(&XDH_bssl);
+    printf("==== HPKE BSSL ====\n");
+    bench_dhkem_auth_encapdecap_bssl();
+
+    return 0;
 }
