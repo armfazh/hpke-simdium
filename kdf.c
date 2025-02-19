@@ -10,12 +10,14 @@
  */
 #include "kdf.h"
 
-static const uint8_t KemSuiteID[5] = {'K', 'E','M', 0x00, 0x20};
+static const uint8_t KemSuiteID[5] = {'K', 'E', 'M', 0x00, 0x20};
 static const uint8_t Version[7] = {'H', 'P', 'K', 'E', '-', 'v', '1'};
 
-static void labeled_extract(u8 *key, const u8 *secret, const u8 *salt, const u8 *label)
+static void labeled_extract(u8 *key, const u8 *secret, const u8 *salt,
+                            const u8 *label)
 {
-    u8 labeled_ikm = u8_malloc(sizeof(Version) + sizeof(KemSuiteID) + label->len + secret->len);
+    u8 labeled_ikm = u8_malloc(sizeof(Version) + sizeof(KemSuiteID) + label->len +
+                               secret->len);
     uint8_t *ptr = labeled_ikm.data;
     u8_append_array(&ptr, Version, sizeof(Version));
     u8_append_array(&ptr, KemSuiteID, sizeof(KemSuiteID));
@@ -26,10 +28,12 @@ static void labeled_extract(u8 *key, const u8 *secret, const u8 *salt, const u8 
     u8_free(&labeled_ikm);
 }
 
-static void labeled_expand(u8 *out, const u8 *key, const u8 *info, const u8 *label)
+static void labeled_expand(u8 *out, const u8 *key, const u8 *info,
+                           const u8 *label)
 {
     uint8_t length[2] = {(out->len >> 8) & 0xFF, out->len & 0xFF};
-    u8 labeled_info = u8_malloc(2 + sizeof(Version) + sizeof(KemSuiteID) + label->len + info->len);
+    u8 labeled_info = u8_malloc(2 + sizeof(Version) + sizeof(
+                                    KemSuiteID) + label->len + info->len);
 
     uint8_t *ptr = labeled_info.data;
     u8_append_array(&ptr, length, 2);
@@ -52,26 +56,29 @@ void extract_and_expand(u8 *shared_secret, const u8 *dh, const u8 *kem_context)
     labeled_expand(shared_secret, &eae_prk, kem_context, &label_shared_secret);
 }
 
-void extract_and_expand_single(u8 *shared_secret, const u8 *dh, const u8 *kem_context)
+void extract_and_expand_single(u8 *shared_secret, const u8 *dh,
+                               const u8 *kem_context)
 {
-    const uint8_t label_eae[7] = {'e','a','e','_','p','r','k'};
-    const uint8_t label_shared_secret[13] = {'s','h','a','r','e','d','_','s','e','c','r','e','t'};
+    const uint8_t label_eae[7] = {'e', 'a', 'e', '_', 'p', 'r', 'k'};
+    const uint8_t label_shared_secret[13] = {'s', 'h', 'a', 'r', 'e', 'd', '_', 's', 'e', 'c', 'r', 'e', 't'};
 
-    u8 labeled_ikm = u8_malloc(sizeof(Version) + sizeof(KemSuiteID) + sizeof(label_eae) + dh->len);
+    u8 labeled_ikm = u8_malloc(sizeof(Version) + sizeof(KemSuiteID) + sizeof(
+                                   label_eae) + dh->len);
     uint8_t *ptr = labeled_ikm.data;
     u8_append_array(&ptr, Version, sizeof(Version));
     u8_append_array(&ptr, KemSuiteID, sizeof(KemSuiteID));
-    u8_append_array(&ptr, label_eae,sizeof(label_eae));
+    u8_append_array(&ptr, label_eae, sizeof(label_eae));
     u8_append(&ptr, dh);
 
     uint8_t length[2] = {(shared_secret->len >> 8) & 0xFF, shared_secret->len & 0xFF};
-    u8 labeled_info = u8_malloc(2 + sizeof(Version) + sizeof(KemSuiteID) + sizeof(label_shared_secret) + kem_context->len);
+    u8 labeled_info = u8_malloc(2 + sizeof(Version) + sizeof(KemSuiteID) + sizeof(
+                                    label_shared_secret) + kem_context->len);
 
     ptr = labeled_info.data;
     u8_append_array(&ptr, length, 2);
     u8_append_array(&ptr, Version, sizeof(Version));
     u8_append_array(&ptr, KemSuiteID, sizeof(KemSuiteID));
-    u8_append_array(&ptr, label_shared_secret,  sizeof(label_shared_secret));
+    u8_append_array(&ptr, label_shared_secret, sizeof(label_shared_secret));
     u8_append(&ptr, kem_context);
 
     hkdf_extract_expand(shared_secret, &labeled_ikm, &labeled_info);
@@ -79,4 +86,3 @@ void extract_and_expand_single(u8 *shared_secret, const u8 *dh, const u8 *kem_co
     u8_free(&labeled_ikm);
     u8_free(&labeled_info);
 }
-

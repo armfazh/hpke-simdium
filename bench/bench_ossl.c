@@ -56,8 +56,10 @@ int main_dhkem_ossl(void)
                                   OSSL_HPKE_ROLE_SENDER,
                                   NULL, NULL)) == NULL)
         goto err;
+
     if (OSSL_HPKE_encap(sctx, enc, &enclen, pub, publen, info, infolen) != 1)
         goto err;
+
     if (OSSL_HPKE_seal(sctx, ct, &ctlen, aad, aadlen, pt, ptlen) != 1)
         goto err;
 
@@ -66,8 +68,10 @@ int main_dhkem_ossl(void)
                                   OSSL_HPKE_ROLE_RECEIVER,
                                   NULL, NULL)) == NULL)
         goto err;
+
     if (OSSL_HPKE_decap(rctx, enc, enclen, priv, info, infolen) != 1)
         goto err;
+
     if (OSSL_HPKE_open(rctx, clear, &clearlen, aad, aadlen, ct, ctlen) != 1)
         goto err;
 
@@ -123,10 +127,13 @@ int main_auth_dhkem_ossl(void)
                                   OSSL_HPKE_ROLE_SENDER,
                                   NULL, NULL)) == NULL)
         goto err;
+
     if (OSSL_HPKE_CTX_set1_authpriv(sctx, skS) != 1)
         goto err;
+
     if (OSSL_HPKE_encap(sctx, enc, &enclen, pkR, pkRlen, info, infolen) != 1)
         goto err;
+
     if (OSSL_HPKE_seal(sctx, ct, &ctlen, aad, aadlen, pt, ptlen) != 1)
         goto err;
 
@@ -135,10 +142,13 @@ int main_auth_dhkem_ossl(void)
                                   OSSL_HPKE_ROLE_RECEIVER,
                                   NULL, NULL)) == NULL)
         goto err;
+
     if (OSSL_HPKE_CTX_set1_authpub(rctx, pkS, pkSlen) != 1)
         goto err;
+
     if (OSSL_HPKE_decap(rctx, enc, enclen, skR, info, infolen) != 1)
         goto err;
+
     if (OSSL_HPKE_open(rctx, clear, &clearlen, aad, aadlen, ct, ctlen) != 1)
         goto err;
 
@@ -189,8 +199,10 @@ void bench_dhkem_encapdecap_ossl(void)
                                   OSSL_HPKE_ROLE_SENDER,
                                   NULL, NULL)) == NULL)
         goto err;
+
     if (OSSL_HPKE_encap(sctx, enc, &enclen, pub, publen, info, infolen) != 1)
         goto err;
+
     if (OSSL_HPKE_seal(sctx, ct, &ctlen, aad, aadlen, pt, ptlen) != 1)
         goto err;
 
@@ -199,8 +211,10 @@ void bench_dhkem_encapdecap_ossl(void)
                                   OSSL_HPKE_ROLE_RECEIVER,
                                   NULL, NULL)) == NULL)
         goto err;
+
     if (OSSL_HPKE_decap(rctx, enc, enclen, priv, info, infolen) != 1)
         goto err;
+
     if (OSSL_HPKE_open(rctx, clear, &clearlen, aad, aadlen, ct, ctlen) != 1)
         goto err;
 
@@ -215,12 +229,14 @@ err:
                 EVP_PKEY_free(sk));
 
     oper_second(, encap,
-                OSSL_HPKE_CTX *sctx = OSSL_HPKE_CTX_new(mode, suite, OSSL_HPKE_ROLE_SENDER, NULL, NULL);
+                OSSL_HPKE_CTX *sctx = OSSL_HPKE_CTX_new(mode, suite, OSSL_HPKE_ROLE_SENDER,
+                                                        NULL, NULL);
                 OSSL_HPKE_encap(sctx, enc, &enclen, pub, publen, NULL, 0);
                 OSSL_HPKE_CTX_free(sctx));
 
     oper_second(, decap,
-                OSSL_HPKE_CTX *rctx = OSSL_HPKE_CTX_new(mode, suite, OSSL_HPKE_ROLE_RECEIVER, NULL, NULL);
+                OSSL_HPKE_CTX *rctx = OSSL_HPKE_CTX_new(mode, suite, OSSL_HPKE_ROLE_RECEIVER,
+                                                        NULL, NULL);
                 OSSL_HPKE_decap(rctx, enc, enclen, priv, NULL, 0);
                 OSSL_HPKE_CTX_free(rctx));
 
@@ -267,10 +283,13 @@ void bench_dhkem_auth_encapdecap_ossl(void)
                                   OSSL_HPKE_ROLE_SENDER,
                                   NULL, NULL)) == NULL)
         goto err;
+
     if (OSSL_HPKE_CTX_set1_authpriv(sctx, skS) != 1)
         goto err;
+
     if (OSSL_HPKE_encap(sctx, enc, &enclen, pkR, pkRlen, info, infolen) != 1)
         goto err;
+
     if (OSSL_HPKE_seal(sctx, ct, &ctlen, aad, aadlen, pt, ptlen) != 1)
         goto err;
 
@@ -279,10 +298,13 @@ void bench_dhkem_auth_encapdecap_ossl(void)
                                   OSSL_HPKE_ROLE_RECEIVER,
                                   NULL, NULL)) == NULL)
         goto err;
+
     if (OSSL_HPKE_CTX_set1_authpub(rctx, pkS, pkSlen) != 1)
         goto err;
+
     if (OSSL_HPKE_decap(rctx, enc, enclen, skR, info, infolen) != 1)
         goto err;
+
     if (OSSL_HPKE_open(rctx, clear, &clearlen, aad, aadlen, ct, ctlen) != 1)
         goto err;
 
@@ -299,13 +321,15 @@ err:
                 EVP_PKEY_free(sk));
 
     oper_second(, auth_encap,
-                OSSL_HPKE_CTX *sctx = OSSL_HPKE_CTX_new(mode, suite, OSSL_HPKE_ROLE_SENDER, NULL, NULL);
+                OSSL_HPKE_CTX *sctx = OSSL_HPKE_CTX_new(mode, suite, OSSL_HPKE_ROLE_SENDER,
+                                                        NULL, NULL);
                 OSSL_HPKE_CTX_set1_authpriv(sctx, skS);
                 OSSL_HPKE_encap(sctx, enc, &enclen, pkR, pkRlen, NULL, 0);
                 OSSL_HPKE_CTX_free(sctx));
 
     oper_second(, auth_decap,
-                OSSL_HPKE_CTX *rctx = OSSL_HPKE_CTX_new(mode, suite, OSSL_HPKE_ROLE_RECEIVER, NULL, NULL);
+                OSSL_HPKE_CTX *rctx = OSSL_HPKE_CTX_new(mode, suite, OSSL_HPKE_ROLE_RECEIVER,
+                                                        NULL, NULL);
                 OSSL_HPKE_CTX_set1_authpub(rctx, pkS, pkSlen);
                 OSSL_HPKE_decap(rctx, enc, enclen, skR, NULL, 0);
                 OSSL_HPKE_CTX_free(rctx));

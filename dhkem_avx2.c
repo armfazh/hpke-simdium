@@ -22,20 +22,21 @@ void encap_avx2(u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR)
     u8_copy(enc, &pkE);
 
     uint8_t *kc = kem_context->data;
-    u8_append(&kc,enc);
-    u8_append(&kc,pkR);
+    u8_append(&kc, enc);
+    u8_append(&kc, pkR);
 }
 
-void decap_avx2( u8 *dh, u8 *kem_context, u8 *enc, u8 *skR, u8 *pkR)
+void decap_avx2(u8 *dh, u8 *kem_context, u8 *enc, u8 *skR, u8 *pkR)
 {
     X25519_AVX2.shared(dh->data, skR->data, enc->data);
 
     uint8_t *kc = kem_context->data;
-    u8_append(&kc,enc);
-    u8_append(&kc,pkR);
+    u8_append(&kc, enc);
+    u8_append(&kc, pkR);
 }
 
-void auth_encap_avx2(u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR, u8 *skS, u8 *pkS)
+void auth_encap_avx2(u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR, u8 *skS,
+                     u8 *pkS)
 {
     u8_static(skE, 32);
     u8_static(pkE, 32);
@@ -46,18 +47,19 @@ void auth_encap_avx2(u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR, u8 *skS, u8 *pkS
     u8_copy(enc, &pkE);
 
     uint8_t *kc = kem_context->data;
-    u8_append(&kc,enc);
-    u8_append(&kc,pkR);
-    u8_append(&kc,pkS);
+    u8_append(&kc, enc);
+    u8_append(&kc, pkR);
+    u8_append(&kc, pkS);
 }
 
-void auth_decap_avx2(u8 *dh, u8 *kem_context, u8 *enc, u8 *skR, u8 *pkR, u8 *pkS)
+void auth_decap_avx2(u8 *dh, u8 *kem_context, u8 *enc, u8 *skR, u8 *pkR,
+                     u8 *pkS)
 {
     X25519_AVX2.shared(&dh->data[0], skR->data, enc->data);
     X25519_AVX2.shared(&dh->data[32], skR->data, pkS->data);
 
     uint8_t *kc = kem_context->data;
-    u8_append(&kc,enc);
-    u8_append(&kc,pkR);
-    u8_append(&kc,pkS);
+    u8_append(&kc, enc);
+    u8_append(&kc, pkR);
+    u8_append(&kc, pkS);
 }

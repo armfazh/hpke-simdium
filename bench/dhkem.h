@@ -13,7 +13,8 @@
 
 #include "types.h"
 
-struct xdh {
+struct xdh
+{
     char *name;
     void (*keygen)(u8 *sk, u8 *pk);
     void (*shared)(u8 *shared_secret, u8 *sk, u8 *pk);
@@ -21,7 +22,9 @@ struct xdh {
 
 void encap(struct xdh *x, u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR);
 void decap(struct xdh *x, u8 *dh, u8 *kem_context, u8 *enc, u8 *skR, u8 *pkR);
-void auth_encap(struct xdh *x, u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR, u8 *skS, u8 *pkS);
-void auth_decap(struct xdh *x, u8 *dh, u8 *kem_context, u8 *enc, u8 *skR, u8 *pkR, u8 *pkS);
+void auth_encap(struct xdh *x, u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR,
+                u8 *skS, u8 *pkS);
+void auth_decap(struct xdh *x, u8 *dh, u8 *kem_context, u8 *enc, u8 *skR,
+                u8 *pkR, u8 *pkS);
 
 #endif /* _DHKEM_H_ */

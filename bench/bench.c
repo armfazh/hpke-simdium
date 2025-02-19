@@ -30,7 +30,7 @@ void bench_dhkem_encapdecap(struct xdh *x)
     x->keygen(&skR, &pkR);
 
     u8 dh = u8_malloc(32);
-    u8 kc = u8_malloc(2*32);
+    u8 kc = u8_malloc(2 * 32);
     u8 enc = u8_malloc(32);
     encap(x, &dh, &kc, &enc, &pkR);
     decap(x, &dh, &kc, &enc, &skR, &pkR);
@@ -57,8 +57,8 @@ void bench_dhkem_authencapdecap(struct xdh *x)
     u8 pkR = u8_malloc(32);
     x->keygen(&skR, &pkR);
 
-    u8 dh = u8_malloc(2*32);
-    u8 kc = u8_malloc(3*32);
+    u8 dh = u8_malloc(2 * 32);
+    u8 kc = u8_malloc(3 * 32);
     u8 enc = u8_malloc(32);
     auth_encap(x, &dh, &kc, &enc, &pkR, &skS, &pkS);
     auth_decap(x, &dh, &kc, &enc, &skR, &pkR, &pkS);
@@ -77,4 +77,3 @@ void bench_dhkem_authencapdecap(struct xdh *x)
     u8_free(&kc);
     u8_free(&enc);
 }
-

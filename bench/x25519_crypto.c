@@ -24,9 +24,9 @@
 #endif
 
 // Utility to handle errors
-#define handle_errors(msg)                                                    \
+#define handle_errors(msg) \
     printf("(%d) error at %s:%d %s\n", CRYPTO_PROV, __FILE__, __LINE__, msg); \
-    ERR_print_errors_fp(stderr);                                              \
+    ERR_print_errors_fp(stderr); \
     exit(1);
 
 void CRYPTO_NAME(info)(void)
@@ -41,21 +41,29 @@ static void CRYPTO_NAME(keygen)(u8 *sk, u8 *pk)
 {
     EVP_PKEY *key = NULL;
     EVP_PKEY_CTX *ctx = EVP_PKEY_CTX_new_id(EVP_PKEY_X25519, NULL);
-    if (!ctx) {
+
+    if (!ctx)
+    {
         handle_errors("EVP_PKEY_CTX_new_id failed");
     }
-    if (EVP_PKEY_keygen_init(ctx) <= 0) {
+
+    if (EVP_PKEY_keygen_init(ctx) <= 0)
+    {
         handle_errors("EVP_PKEY_keygen_init failed");
     }
-    if (EVP_PKEY_keygen(ctx, &key) <= 0) {
+
+    if (EVP_PKEY_keygen(ctx, &key) <= 0)
+    {
         handle_errors("EVP_PKEY_keygen failed");
     }
 
-    if (EVP_PKEY_get_raw_private_key(key, sk->data, &sk->len) <= 0) {
+    if (EVP_PKEY_get_raw_private_key(key, sk->data, &sk->len) <= 0)
+    {
         handle_errors("EVP_PKEY_get_raw_private_key failed");
     }
 
-    if (EVP_PKEY_get_raw_public_key(key, pk->data, &pk->len) <= 0) {
+    if (EVP_PKEY_get_raw_public_key(key, pk->data, &pk->len) <= 0)
+    {
         handle_errors("EVP_PKEY_get_raw_public_key failed");
     }
 
@@ -65,30 +73,41 @@ static void CRYPTO_NAME(keygen)(u8 *sk, u8 *pk)
 
 static void CRYPTO_NAME(shared)(u8 *shared_secret, u8 *sk, u8 *pk)
 {
-    EVP_PKEY *sk_key = EVP_PKEY_new_raw_private_key(EVP_PKEY_X25519, NULL, sk->data, sk->len);
-    if (!sk_key) {
+    EVP_PKEY *sk_key = EVP_PKEY_new_raw_private_key(EVP_PKEY_X25519, NULL,
+                                                    sk->data, sk->len);
+
+    if (!sk_key)
+    {
         handle_errors("EVP_PKEY_new_raw_private_key failed");
     }
 
-    EVP_PKEY *pk_key = EVP_PKEY_new_raw_public_key(EVP_PKEY_X25519, NULL, pk->data, pk->len);
-    if (!pk_key) {
+    EVP_PKEY *pk_key = EVP_PKEY_new_raw_public_key(EVP_PKEY_X25519, NULL,
+                                                   pk->data, pk->len);
+
+    if (!pk_key)
+    {
         handle_errors("EVP_PKEY_new_raw_public_key failed");
     }
 
     EVP_PKEY_CTX *ctx = EVP_PKEY_CTX_new(sk_key, NULL);
-    if (!ctx) {
+
+    if (!ctx)
+    {
         handle_errors("EVP_PKEY_CTX_new failed");
     }
 
-    if (EVP_PKEY_derive_init(ctx) <= 0) {
+    if (EVP_PKEY_derive_init(ctx) <= 0)
+    {
         handle_errors("EVP_PKEY_derive_init failed");
     }
 
-    if (EVP_PKEY_derive_set_peer(ctx, pk_key) <= 0) {
+    if (EVP_PKEY_derive_set_peer(ctx, pk_key) <= 0)
+    {
         handle_errors("EVP_PKEY_derive_set_peer failed");
     }
 
-    if (EVP_PKEY_derive(ctx, shared_secret->data, &shared_secret->len) <= 0) {
+    if (EVP_PKEY_derive(ctx, shared_secret->data, &shared_secret->len) <= 0)
+    {
         handle_errors("EVP_PKEY_derive failed");
     }
 
@@ -97,7 +116,8 @@ static void CRYPTO_NAME(shared)(u8 *shared_secret, u8 *sk, u8 *pk)
     EVP_PKEY_CTX_free(ctx);
 }
 
-struct xdh CRYPTO_NAME(XDH) = {
+struct xdh CRYPTO_NAME(XDH) =
+{
     .name = stringify(CRYPTO_NAME("")),
     .keygen = CRYPTO_NAME(keygen),
     .shared = CRYPTO_NAME(shared),
