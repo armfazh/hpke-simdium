@@ -1,6 +1,10 @@
 # hpke-simdium
 
-C implementation of the Hybrid Public-Key Encryption (HPKE) algorithm.
+SIMD C implementation of the Hybrid Public-Key Encryption (HPKE) algorithm RF-9180.
+
+Uses AVX-2 and AVX-512 for speeding up KEM operations.
+Supported suite:
+- KEM X25519 (0x20)
 
 ## License
 
