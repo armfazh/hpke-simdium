@@ -27,8 +27,10 @@ add_library(hpke-simdium-common OBJECT
 
 add_library(hpke-simdium
     $<TARGET_OBJECTS:hpke-simdium-common>
+    dhkem_x64.c
     dhkem_avx2.c
     dhkem_avx512.c
+    dhkem.c
 )
 target_link_libraries(hpke-simdium faz_ecc_avx2)
 

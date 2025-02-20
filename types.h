@@ -40,6 +40,8 @@ void u8_append_array(uint8_t * *head, const uint8_t* data, size_t len);
                 .len = length, \
               };
 
+#define X255KEY_SIZE 32
+
 #ifdef __cplusplus
 } /* extern "C" */
 
