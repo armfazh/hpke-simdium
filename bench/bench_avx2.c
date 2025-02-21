@@ -65,6 +65,9 @@ static void bench_x25519_avx512()
 
 static void bench_dhkem_encapdecap_avx512()
 {
+    u8 skE = u8_malloc(32);
+    X25519_AVX2.randKey(skE.data);
+
     u8 skR = u8_malloc(32);
     u8 pkR = u8_malloc(32);
     X25519_AVX2.keygen(skR.data, pkR.data);
@@ -72,13 +75,14 @@ static void bench_dhkem_encapdecap_avx512()
     u8 dh = u8_malloc(32);
     u8 kc = u8_malloc(2 * 32);
     u8 enc = u8_malloc(32);
-    encap_avx512(&dh, &kc, &enc, &pkR);
+    encap_avx512(&dh, &kc, &enc, &pkR, &skE);
     decap_avx512(&dh, &kc, &enc, &skR, &pkR);
 
     oper_second(, keygen, X25519_AVX2.keygen(skR.data, pkR.data));
-    oper_second(, encap, encap_avx512(&dh, &kc, &enc, &pkR));
+    oper_second(, encap, encap_avx512(&dh, &kc, &enc, &pkR, &skE));
     oper_second(, decap, decap_avx512(&dh, &kc, &enc, &skR, &pkR));
 
+    u8_free(&skE);
     u8_free(&skR);
     u8_free(&pkR);
 
@@ -89,6 +93,9 @@ static void bench_dhkem_encapdecap_avx512()
 
 static void bench_dhkem_authencapdecap_avx512()
 {
+    u8 skE = u8_malloc(32);
+    X25519_AVX2.randKey(skE.data);
+
     u8 skS = u8_malloc(32);
     u8 pkS = u8_malloc(32);
     X25519_AVX2.keygen(skS.data, pkS.data);
@@ -100,13 +107,15 @@ static void bench_dhkem_authencapdecap_avx512()
     u8 dh = u8_malloc(2 * 32);
     u8 kc = u8_malloc(3 * 32);
     u8 enc = u8_malloc(32);
-    auth_encap_avx512(&dh, &kc, &enc, &pkR, &skS, &pkS);
+    auth_encap_avx512(&dh, &kc, &enc, &pkR, &skS, &pkS, &skE);
     auth_decap_avx512(&dh, &kc, &enc, &skR, &pkR, &pkS);
 
     oper_second(, keygen, X25519_AVX2.keygen(skR.data, pkR.data));
-    oper_second(, auth_encap, auth_encap_avx512(&dh, &kc, &enc, &pkR, &skS, &pkS));
+    oper_second(, auth_encap, auth_encap_avx512(&dh, &kc, &enc, &pkR, &skS, &pkS,
+                                                &skE));
     oper_second(, auth_decap, auth_decap_avx512(&dh, &kc, &enc, &skR, &pkR, &pkS));
 
+    u8_free(&skE);
     u8_free(&skS);
     u8_free(&pkS);
 

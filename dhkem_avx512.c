@@ -13,17 +13,15 @@
 #include <string.h>
 #include <faz_ecdh_avx2.h>
 
-void encap_avx512(u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR)
+void encap_avx512(u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR, u8 *skE)
 {
     u8_static(gen, 32);
-    u8_static(skE, 32);
     u8_static(pkE, 32);
     struct X25519_KEY_x2 ss, sk, pk;
 
     gen.data[0] = 9;
-    X25519_AVX512.randKey(skE.data);
-    memcpy(sk.k0, skE.data, skE.len);
-    memcpy(sk.k1, skE.data, skE.len);
+    memcpy(sk.k0, skE->data, skE->len);
+    memcpy(sk.k1, skE->data, skE->len);
 
     memcpy(pk.k0, gen.data, gen.len);
     memcpy(pk.k1, pkR->data, pkR->len);
@@ -48,15 +46,13 @@ void decap_avx512(u8 *dh, u8 *kem_context, u8 *enc, u8 *skR, u8 *pkR)
 }
 
 void auth_encap_avx512(u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR, u8 *skS,
-                       u8 *pkS)
+                       u8 *pkS, u8 *skE)
 {
-    u8_static(skE, 32);
     u8_static(pkE, 32);
-
-    X25519_AVX2.keygen(skE.data, pkE.data);
+    X25519_AVX2.keygen(pkE.data, skE->data);
 
     struct X25519_KEY_x2 ss, sk, pk;
-    memcpy(sk.k0, skE.data, skE.len);
+    memcpy(sk.k0, skE->data, skE->len);
     memcpy(sk.k1, skS->data, skS->len);
 
     memcpy(pk.k0, pkR->data, pkR->len);

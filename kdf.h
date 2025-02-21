@@ -18,6 +18,7 @@ extern "C" {
 
 #include "types.h"
 
+void derive_key(u8* key, u8 *seed);
 void extract_and_expand(u8 *shared_secret, const u8 *dh, const u8 *kem_context);
 void extract_and_expand_single(u8 *shared_secret, const u8 *dh,
                                const u8 *kem_context);

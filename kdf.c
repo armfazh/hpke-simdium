@@ -86,3 +86,19 @@ void extract_and_expand_single(u8 *shared_secret, const u8 *dh,
     u8_free(&labeled_ikm);
     u8_free(&labeled_info);
 }
+
+void derive_key(u8* key, u8 *seed)
+{
+    u8 label_dkp = u8_string("dkp_prk");
+    u8 label_sk = u8_string("sk");
+    u8_static(empty_salt, 32);
+    u8_static(dkp_prk, 32);
+    u8 empty_info =
+    {
+        .data = NULL,
+        .len = 0,
+    };
+
+    labeled_extract(&dkp_prk, seed, &empty_salt, &label_dkp);
+    labeled_expand(key, &dkp_prk, &empty_info, &label_sk);
+}

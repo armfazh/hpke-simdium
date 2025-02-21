@@ -17,10 +17,10 @@ extern "C" {
 
 #include "types.h"
 
-void encap_avx2(u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR);
+void encap_avx2(u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR, u8 *skE);
 void decap_avx2(u8 *dh, u8 *kem_context, u8 *enc, u8 *skR, u8 *pkR);
 void auth_encap_avx2(u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR, u8 *skS,
-                     u8 *pkS);
+                     u8 *pkS, u8 *skE);
 void auth_decap_avx2(u8 *dh, u8 *kem_context, u8 *enc, u8 *skR, u8 *pkR,
                      u8 *pkS);
 

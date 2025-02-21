@@ -17,9 +17,9 @@ extern "C" {
 
 #include "types.h"
 
-void encap(u8 *shared, u8 *enc, u8 *pkR);
+void encap(u8 *shared, u8 *enc, u8 *pkR, u8 *skE);
 void decap(u8 *shared, u8 *enc, u8 *skR, u8 *pkR);
-void auth_encap(u8 *shared, u8 *enc, u8 *pkR, u8 *skS, u8 *pkS);
+void auth_encap(u8 *shared, u8 *enc, u8 *pkR, u8 *skS, u8 *pkS, u8 *skE);
 void auth_decap(u8 *shared, u8 *enc, u8 *skR, u8 *pkR, u8 *pkS);
 
 #ifdef __cplusplus

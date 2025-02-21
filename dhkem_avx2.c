@@ -12,13 +12,12 @@
 
 #include <faz_ecdh_avx2.h>
 
-void encap_avx2(u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR)
+void encap_avx2(u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR, u8 *skE)
 {
-    u8_static(skE, 32);
     u8_static(pkE, 32);
 
-    X25519_AVX2.keygen(skE.data, pkE.data);
-    X25519_AVX2.shared(dh->data, skE.data, pkR->data);
+    X25519_AVX2.keygen(pkE.data, skE->data);
+    X25519_AVX2.shared(dh->data, skE->data, pkR->data);
     u8_copy(enc, &pkE);
 
     uint8_t *kc = kem_context->data;
@@ -36,13 +35,12 @@ void decap_avx2(u8 *dh, u8 *kem_context, u8 *enc, u8 *skR, u8 *pkR)
 }
 
 void auth_encap_avx2(u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR, u8 *skS,
-                     u8 *pkS)
+                     u8 *pkS, u8 *skE)
 {
-    u8_static(skE, 32);
     u8_static(pkE, 32);
 
-    X25519_AVX2.keygen(skE.data, pkE.data);
-    X25519_AVX2.shared(&dh->data[0], skE.data, pkR->data);
+    X25519_AVX2.keygen(pkE.data, skE->data);
+    X25519_AVX2.shared(&dh->data[0], skE->data, pkR->data);
     X25519_AVX2.shared(&dh->data[32], skS->data, pkR->data);
     u8_copy(enc, &pkE);
 
