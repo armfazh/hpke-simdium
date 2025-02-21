@@ -38,7 +38,7 @@ void encap_avx512(u8 *dh, u8 *kem_context, u8 *enc, u8 *pkR, u8 *skE)
 
 void decap_avx512(u8 *dh, u8 *kem_context, u8 *enc, u8 *skR, u8 *pkR)
 {
-    X25519_AVX2.shared(dh->data, skR->data, enc->data);
+    X25519_AVX2.shared(dh->data, enc->data, skR->data);
 
     uint8_t *kc = kem_context->data;
     u8_append(&kc, enc);

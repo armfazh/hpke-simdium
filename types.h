@@ -33,6 +33,8 @@ void u8_print(const u8 *x);
 void u8_append(uint8_t**head, const u8* x);
 void u8_append_array(uint8_t * *head, const uint8_t* data, size_t len);
 
+#define u8_debug(X) printf(#X": ");u8_print(X);
+
 #define u8_static(name, length) \
     uint8_t name##_data[length] = {0}; \
     u8 name = { \
