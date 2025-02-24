@@ -36,7 +36,7 @@ add_executable(bench_bssl
 target_compile_definitions(bench_bssl PRIVATE CRYPTO_PROV=1 BORINGSSL_PREFIX=BSSL_)
 target_include_directories(bench_bssl PRIVATE ../third_party/bssl/include)
 target_link_libraries(bench_bssl PRIVATE crypto_bssl)
-target_link_directories(bench_bssl PRIVATE ../third_party/bssl/lib64)
+target_link_directories(bench_bssl PRIVATE ../third_party/bssl/lib)
 
 add_executable(bench_avx2
     bench_avx2.c

@@ -33,7 +33,7 @@ add_executable(kdf_bssl kdf_test.cc common.cc ../kdf_bssl.c ../kdf.c ../types.c)
 target_compile_definitions(kdf_bssl PRIVATE BORINGSSL_PREFIX=BSSL_)
 target_include_directories(kdf_bssl PRIVATE ../third_party/bssl/include)
 target_link_libraries(kdf_bssl PRIVATE crypto_bssl GTest::gtest_main)
-target_link_directories(kdf_bssl PRIVATE ../third_party/bssl/lib64)
+target_link_directories(kdf_bssl PRIVATE ../third_party/bssl/lib)
 gtest_discover_tests(kdf_bssl)
 
 add_executable(dhkem_ossl dhkem_test.cc common.cc ../kdf_ossl.c ../kdf.c)
