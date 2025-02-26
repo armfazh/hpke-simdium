@@ -6,14 +6,14 @@ Uses AVX-2 and AVX-512 for speeding up KEM operations.
 Supported suites:
 - KEM X25519 (0x20)
 
-## Compilation
+## Building
 
-Must enable AVX512 support to compile this library:
+To compile this library, run:
 ```bash
-    $ cd hpke-simdium
-    $ mkdir build; cd build
-    $ cmake .. -DENABLE_AVX512=ON
-    $ make all
+cd hpke-simdium
+mkdir build; cd build
+cmake ..
+make all
 ```
 
 ## License
