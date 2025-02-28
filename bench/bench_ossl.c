@@ -18,7 +18,7 @@
 #include <openssl/hpke.h>
 
 #include "clocks.h"
-#include "bench.h"
+#include "bench_dhkem.h"
 
 #define LBUFSIZE 48
 

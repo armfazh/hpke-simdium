@@ -9,7 +9,7 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-#include "x25519_bssl.h"
+#include "x25519_awslc.h"
 
 #include <stddef.h>
 #include <stdio.h>
@@ -28,7 +28,7 @@
     ERR_print_errors_fp(stderr); \
     exit(1);
 
-int main_dhkem_bssl(void)
+int main_dhkem_awslc(void)
 {
     u8_static(pkR, EVP_HPKE_MAX_PUBLIC_KEY_LENGTH);
 
@@ -97,7 +97,7 @@ int main_dhkem_bssl(void)
     return 0;
 }
 
-int main_auth_dhkem_bssl(void)
+int main_auth_dhkem_awslc(void)
 {
     u8_static(pkR, EVP_HPKE_MAX_PUBLIC_KEY_LENGTH);
     u8_static(pkS, EVP_HPKE_MAX_PUBLIC_KEY_LENGTH);
@@ -182,7 +182,7 @@ int main_auth_dhkem_bssl(void)
     return 0;
 }
 
-void bench_dhkem_encapdecap_bssl(void)
+void bench_dhkem_encapdecap_awslc(void)
 {
     u8_static(pkR, EVP_HPKE_MAX_PUBLIC_KEY_LENGTH);
 
@@ -287,7 +287,7 @@ void bench_dhkem_encapdecap_bssl(void)
     EVP_HPKE_KEY_cleanup(&key);
 }
 
-void bench_dhkem_auth_encapdecap_bssl(void)
+void bench_dhkem_auth_encapdecap_awslc(void)
 {
     u8_static(pkR, EVP_HPKE_MAX_PUBLIC_KEY_LENGTH);
     u8_static(pkS, EVP_HPKE_MAX_PUBLIC_KEY_LENGTH);
@@ -408,23 +408,23 @@ void bench_dhkem_auth_encapdecap_bssl(void)
 
 int main(void)
 {
-    info_bssl();
+    info_awslc();
 
     printf("==== Benchmarking DH ====\n");
-    printf("====== X25519 BSSL ======\n");
-    bench_x25519(&XDH_bssl);
+    printf("====== X25519 awslc ======\n");
+    bench_x25519(&XDH_awslc);
 
     printf("===== Benchmarking DHKEM ====\n");
-    printf("====== EncapDecap BSSL ======\n");
-    bench_dhkem_encapdecap(&XDH_bssl);
-    printf("==== HPKE OSSL ====\n");
-    bench_dhkem_encapdecap_bssl();
+    printf("====== EncapDecap awslc ======\n");
+    bench_dhkem_encapdecap(&XDH_awslc);
+    printf("==== HPKE awslc ====\n");
+    bench_dhkem_encapdecap_awslc();
 
     printf("===== Benchmarking AuthDHKEM ====\n");
-    printf("==== AuthEncapDecap BSSL ====\n");
-    bench_dhkem_authencapdecap(&XDH_bssl);
-    printf("==== HPKE BSSL ====\n");
-    bench_dhkem_auth_encapdecap_bssl();
+    printf("==== AuthEncapDecap awslc ====\n");
+    bench_dhkem_authencapdecap(&XDH_awslc);
+    printf("==== HPKE awslc ====\n");
+    bench_dhkem_auth_encapdecap_awslc();
 
     return 0;
 }

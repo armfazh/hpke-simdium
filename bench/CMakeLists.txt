@@ -15,8 +15,8 @@ add_executable(bench_ossl
     $<TARGET_OBJECTS:hpke-simdium-common>
     bench_ossl.c
     x25519_crypto.c
+    bench_dhkem.c
     dhkem.c
-    bench.c
     clocks.c
 )
 target_include_directories(bench_ossl PRIVATE ../third_party/ossl/include)
@@ -29,8 +29,8 @@ add_executable(bench_bssl
     $<TARGET_OBJECTS:hpke-simdium-common>
     bench_bssl.c
     x25519_crypto.c
+    bench_dhkem.c
     dhkem.c
-    bench.c
     clocks.c
 )
 target_compile_definitions(bench_bssl PRIVATE CRYPTO_PROV=1 BORINGSSL_PREFIX=BSSL_)
@@ -38,11 +38,27 @@ target_include_directories(bench_bssl PRIVATE ../third_party/bssl/include)
 target_link_libraries(bench_bssl PRIVATE crypto_bssl)
 target_link_directories(bench_bssl PRIVATE ../third_party/bssl/lib)
 
-add_executable(bench_avx2
-    bench_avx2.c
+# Benchmark aws-lc
+add_executable(bench_awslc
+    $<TARGET_OBJECTS:hpke-simdium-common>
+    bench_awslc.c
+    x25519_crypto.c
+    bench_dhkem.c
     dhkem.c
-    bench.c
+    clocks.c
+)
+target_compile_definitions(bench_awslc PRIVATE CRYPTO_PROV=2)
+target_include_directories(bench_awslc PRIVATE ../third_party/awslc/include)
+target_link_libraries(bench_awslc PRIVATE crypto_awslc)
+target_link_directories(bench_awslc PRIVATE ../third_party/awslc/lib64)
+
+add_executable(bench_hpke_simdium
+    bench_hpke_simdium.c
+    bench_avx2.c
+    $<$<BOOL:${ENABLE_AVX512}>:bench_avx512.c>
+    bench_dhkem.c
+    dhkem.c
     clocks.c
 )
 
-target_link_libraries(bench_avx2 hpke-simdium)
+target_link_libraries(bench_hpke_simdium hpke-simdium)

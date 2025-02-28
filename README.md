@@ -12,9 +12,12 @@ To compile this library, run:
 ```bash
 cd hpke-simdium
 mkdir build; cd build
-cmake ..
+cmake .. -DENABLE_AVX512=ON
 make all
 ```
+
+Toggle the `ENABLE_AVX512` flag between ON/OFF depending whether AVX512 must be
+enabled.
 
 ## License
 

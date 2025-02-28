@@ -11,7 +11,7 @@ cd openssl
 git checkout openssl-3.2.2
 ./Configure --prefix=`pwd`/install_ossl
 make -j
-make install -j
+make install
 cd install_ossl/lib64
 mv libcrypto.a libcrypto_ossl.a
 
@@ -25,8 +25,8 @@ git checkout 0.20250114.0
 # here we have to compile two times.
 mkdir build
 cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=`pwd`/install_bssl 
-make -j 
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=`pwd`/install_bssl
+make -j
 make install
 go run ../util/read_symbols.go ./install_bssl/lib/libcrypto.a > symbolos.txt
 cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=`pwd`/install_bssl -DBORINGSSL_PREFIX=BSSL_ -DBORINGSSL_PREFIX_SYMBOLS=symbolos.txt
@@ -36,18 +36,16 @@ cp ./symbol_prefix_include/*.h ./install_bssl/include
 cd ./install_bssl/lib/
 mv libcrypto.a libcrypto_bssl.a
 
+# AWS-lc
 
-# Code
-
-git clone https://github.com/armfazh/hpke-simdium
-cd hpke-simdium
-ln -s ~/tmp/openssl/install_ossl/ third_party/ossl
-ln -s ~/tmp/boringssl/build/install_bssl/ third_party/bssl
+cd ~/tmp
+https://github.com/aws/aws-lc/
+cd aws-lc
 mkdir build
 cd build
-cmake ..
-make
-./main
-./bench/bench
-
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=`pwd`/install_awslc
+make -j
+make install
+cd ./install_bssl/lib/
+mv libcrypto.a libcrypto_awslc.a
 

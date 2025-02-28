@@ -21,6 +21,8 @@
 #define CRYPTO_NAME(X) X##_ossl
 #elif CRYPTO_PROV == 1
 #define CRYPTO_NAME(X) X##_bssl
+#elif CRYPTO_PROV == 2
+#define CRYPTO_NAME(X) X##_awslc
 #endif
 
 // Utility to handle errors

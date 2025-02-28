@@ -34,10 +34,11 @@ void u8_free(u8 *x)
 
 u8 u8_hex_string(const char *s)
 {
-    int len = strlen(s);
+    size_t len = strlen(s);
     u8 out = u8_malloc(len / 2);
     char str[3] = {0};
-    int i = 0, b = 0;
+    size_t i = 0;
+    unsigned int b = 0;
 
     for (i = 0; i < len; i += 2)
     {

@@ -8,7 +8,7 @@
  *
  * SPDX-License-Identifier: MPL-2.0
  */
-#include "bench.h"
+#include "bench_dhkem.h"
 #include "clocks.h"
 
 void bench_x25519(struct xdh *x)

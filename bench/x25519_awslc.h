@@ -8,14 +8,12 @@
  *
  * SPDX-License-Identifier: MPL-2.0
  */
-#ifndef _BENCH_H_
-#define _BENCH_H_
+#ifndef _X25519_AWSLC_H_
+#define _X25519_AWSLC_H_
 
 #include "dhkem.h"
 
-void bench_dhkem(void);
-void bench_x25519(struct xdh *x);
-void bench_dhkem_encapdecap(struct xdh *x);
-void bench_dhkem_authencapdecap(struct xdh *x);
+extern struct xdh XDH_awslc;
+void info_awslc(void);
 
-#endif /* _BENCH_H_ */
+#endif /* _X25519_AWSLC_H_ */
