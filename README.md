@@ -9,15 +9,51 @@ Supported suites:
 ## Building
 
 To compile this library, run:
+
 ```bash
 cd hpke-simdium
 mkdir build; cd build
-cmake .. -DENABLE_AVX512=ON
+cmake ..
 make all
 ```
 
-Toggle the `ENABLE_AVX512` flag between ON/OFF depending whether AVX512 must be
-enabled.
+## Building Third Party Libraries
+
+### OpenSSL
+To compile OpenSSL, run:
+
+```bash
+cd hpke-simdium
+mkdir build_third_party; cd build_third_party
+cmake ../third_party
+make openssl
+```
+
+This will populate the `hpke-simdium/third_party/ossl` folder with the OpenSSL library and headers.
+
+### BoringSSL
+To compile BoringSSL, run:
+
+```bash
+cd hpke-simdium
+mkdir build_third_party; cd build_third_party
+cmake ../third_party
+make boringssl
+```
+
+This will populate the `hpke-simdium/third_party/bssl` folder with the BoringSSL library and headers.
+
+### AWS-LC
+To compile AWS-LC, run:
+
+```bash
+cd hpke-simdium
+mkdir build_third_party; cd build_third_party
+cmake ../third_party
+make awslc
+```
+
+This will populate the `hpke-simdium/third_party/awslc` folder with the aws-lc library and headers.
 
 ## License
 
