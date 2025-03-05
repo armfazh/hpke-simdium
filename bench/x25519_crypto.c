@@ -33,8 +33,6 @@
 
 void CRYPTO_NAME(info)(void)
 {
-    OpenSSL_add_all_algorithms();
-    ERR_load_crypto_strings();
     printf("(%d) version: %s\n", CRYPTO_PROV, OPENSSL_VERSION_TEXT);
     printf("EVP_PKEY_X25519: %d\n", EVP_PKEY_X25519);
 }

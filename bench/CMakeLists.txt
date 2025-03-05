@@ -10,7 +10,6 @@
 include_directories(..)
 
 # Benchmark OpenSSL
-# find_package(OpenSSL REQUIRED)
 add_executable(bench_ossl
     $<TARGET_OBJECTS:hpke-simdium-common>
     bench_ossl.c
@@ -21,8 +20,8 @@ add_executable(bench_ossl
 )
 target_include_directories(bench_ossl PRIVATE ../third_party/ossl/include)
 target_compile_definitions(bench_ossl PRIVATE CRYPTO_PROV=0)
-target_link_libraries(bench_ossl PRIVATE crypto_ossl -static)
-target_link_directories(bench_ossl PRIVATE ../third_party/ossl/lib64)
+target_link_libraries(bench_ossl PRIVATE crypto -static)
+target_link_directories(bench_ossl PRIVATE ../third_party/ossl/lib)
 
 # Benchmark BoringSSL
 add_executable(bench_bssl
