@@ -32,9 +32,9 @@ add_executable(bench_bssl
     dhkem.c
     clocks.c
 )
-target_compile_definitions(bench_bssl PRIVATE CRYPTO_PROV=1 BORINGSSL_PREFIX=BSSL_)
+target_compile_definitions(bench_bssl PRIVATE CRYPTO_PROV=1)
 target_include_directories(bench_bssl PRIVATE ../third_party/bssl/include)
-target_link_libraries(bench_bssl PRIVATE crypto_bssl -static)
+target_link_libraries(bench_bssl PRIVATE crypto -static)
 target_link_directories(bench_bssl PRIVATE ../third_party/bssl/lib)
 
 # Benchmark aws-lc
@@ -48,8 +48,8 @@ add_executable(bench_awslc
 )
 target_compile_definitions(bench_awslc PRIVATE CRYPTO_PROV=2)
 target_include_directories(bench_awslc PRIVATE ../third_party/awslc/include)
-target_link_libraries(bench_awslc PRIVATE crypto_awslc -static)
-target_link_directories(bench_awslc PRIVATE ../third_party/awslc/lib64)
+target_link_libraries(bench_awslc PRIVATE crypto -static)
+target_link_directories(bench_awslc PRIVATE ../third_party/awslc/lib)
 
 add_executable(bench_hpke_simdium
     bench_hpke_simdium.c

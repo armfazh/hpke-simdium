@@ -19,6 +19,18 @@ make all
 
 ## Building Third Party Libraries
 
+### GoogleTest
+To compile GoogleTest, run:
+
+```bash
+cd hpke-simdium
+mkdir build_third_party; cd build_third_party
+cmake ../third_party
+make googletest
+```
+
+This will populate the `hpke-simdium/third_party/googletest` folder with the GoogleTest library and headers.
+
 ### OpenSSL
 To compile OpenSSL, run:
 
