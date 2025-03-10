@@ -28,6 +28,9 @@ include(ExternalProject)
 ExternalProject_Add(faz_ecc_avx2_build
     GIT_REPOSITORY https://github.com/armfazh/fld-ecc-vec/
     GIT_TAG 7ed98a46109775429487e8a946879214796d71b9
+    GIT_SHALLOW true
+
+    UPDATE_COMMAND ""
     CMAKE_ARGS
     -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}
     -DENABLE_AVX512=${ENABLE_AVX512}
