@@ -11,7 +11,16 @@ enable_language(CXX)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(GTest PATHS ../third_party/googletest)
+# Building GoogleTest
+set(GOOGLETEST_VERSION 1.16.0)
+set(INSTALL_GT_DIR ${CMAKE_SOURCE_DIR}/googletest)
+include(FetchContent)
+FetchContent_Declare(googletest-${GOOGLETEST_VERSION}
+    URL https://github.com/google/googletest/releases/download/v${GOOGLETEST_VERSION}/googletest-${GOOGLETEST_VERSION}.tar.gz
+    URL_HASH SHA256=78c676fc63881529bf97bf9d45948d905a66833fbfa5318ea2cd7478cb98f399
+    DOWNLOAD_EXTRACT_TIMESTAMP true
+)
+FetchContent_MakeAvailable(googletest-${GOOGLETEST_VERSION})
 include(GoogleTest)
 
 include_directories(..)

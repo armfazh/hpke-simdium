@@ -13,23 +13,6 @@ project(third_party)
 
 include(ExternalProject)
 
-# Building GoogleTest
-set(GOOGLETEST_VERSION 1.16.0)
-set(INSTALL_GT_DIR ${CMAKE_SOURCE_DIR}/googletest)
-add_custom_target(googletest DEPENDS googletest-${GOOGLETEST_VERSION})
-ExternalProject_Add(googletest-${GOOGLETEST_VERSION}
-    URL https://github.com/google/googletest/releases/download/v${GOOGLETEST_VERSION}/googletest-${GOOGLETEST_VERSION}.tar.gz
-    URL_HASH SHA256=78c676fc63881529bf97bf9d45948d905a66833fbfa5318ea2cd7478cb98f399
-    DOWNLOAD_EXTRACT_TIMESTAMP true
-
-    CMAKE_ARGS
-    -DCMAKE_BUILD_TYPE=Release
-    -DCMAKE_INSTALL_PREFIX=${INSTALL_GT_DIR}
-    -DCMAKE_INSTALL_LIBDIR=lib
-    -DBUILD_GMOCK=NO
-    UPDATE_COMMAND ""
-)
-
 # Building OpenSSL
 set(OPENSSL_VERSION 3.4.1)
 set(INSTALL_OSSL_DIR ${CMAKE_SOURCE_DIR}/ossl)
