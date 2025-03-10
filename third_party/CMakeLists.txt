@@ -94,13 +94,13 @@ ExternalProject_Add(boringssl-${BORINGSSL_VERSION}
 )
 
 # Building AWS-LC
-set(AWSLC_VERSION v1.47.0)
+set(AWSLC_VERSION v1.48.1)
 set(INSTALL_AWSLC_DIR ${CMAKE_SOURCE_DIR}/awslc)
 add_custom_target(awslc DEPENDS awslc-${AWSLC_VERSION})
 ExternalProject_Add(awslc-${AWSLC_VERSION}
     EXCLUDE_FROM_ALL true
     URL https://github.com/aws/aws-lc/archive/refs/tags/${AWSLC_VERSION}.tar.gz
-    URL_HASH SHA256=87b996ac317b05acd08124e4351adf20e1db2440c1181ec2d7663b57089dc889
+    URL_HASH SHA256=a65f79b01dc5ef3d2be743dabf5f9b72d4eda869c425348463154a5ae0746afd
     DOWNLOAD_EXTRACT_TIMESTAMP true
 
     CMAKE_ARGS
