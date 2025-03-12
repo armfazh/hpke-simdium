@@ -17,19 +17,16 @@ cmake ..
 make all
 ```
 
-## Building Third Party Libraries
-
-### GoogleTest
-To compile GoogleTest, run:
+To enable support for AVX512, set the flag during configuration.
 
 ```bash
 cd hpke-simdium
-mkdir build_third_party; cd build_third_party
-cmake ../third_party
-make googletest
+mkdir build; cd build
+cmake .. -DENABLE_AVX512=ON
+make all
 ```
 
-This will populate the `hpke-simdium/third_party/googletest` folder with the GoogleTest library and headers.
+## Building Third Party Libraries
 
 ### OpenSSL
 To compile OpenSSL, run:
