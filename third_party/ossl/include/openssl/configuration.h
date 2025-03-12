@@ -151,9 +151,6 @@ extern "C" {
 # ifndef OPENSSL_NO_PADLOCKENG
 #  define OPENSSL_NO_PADLOCKENG
 # endif
-# ifndef OPENSSL_NO_PIE
-#  define OPENSSL_NO_PIE
-# endif
 # ifndef OPENSSL_NO_PINSHARED
 #  define OPENSSL_NO_PINSHARED
 # endif
