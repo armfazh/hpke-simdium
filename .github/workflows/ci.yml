@@ -20,4 +20,5 @@ jobs:
         working-directory: ${{github.workspace}}/build
         run: ctest -C ${{env.BUILD_TYPE}}
       - name: Bench
+        working-directory: ${{github.workspace}}/build
         run: ./bench/bench_hpke_simdium
